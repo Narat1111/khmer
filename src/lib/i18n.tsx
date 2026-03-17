@@ -141,6 +141,7 @@ const toolsEn = {
   character_map: { name: "Character Map", desc: "Copy special symbols & characters" },
   ai_math: { name: "AI Math Solver", desc: "Solve math expressions step by step" },
   quiz: { name: "Quiz", desc: "Test your general knowledge" },
+  meme_maker: { name: "Meme Maker", desc: "Create funny meme images" },
 } as const;
 
 const dict = {
