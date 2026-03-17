@@ -13,7 +13,8 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-const BAKONG_API = "https://api-bakong.nbc.gov.kh/v1";
+// Bakong API endpoints
+const BAKONG_API = "https://api-bakong.nbc.gov.kh";
 
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
@@ -26,85 +27,87 @@ serve(async (req) => {
       });
     }
 
-    const { action, md5, qr_data } = await req.json();
+    const body = await req.json();
+    const { action, md5, qr_data } = body;
 
+    // Generate MD5 hash from QR data
     if (action === "generate_md5" && qr_data) {
-      // Generate MD5 hash using a simple implementation
-      const encoder = new TextEncoder();
-      const data = encoder.encode(qr_data);
-      // Use SHA-256 as MD5 isn't available in Web Crypto, then truncate to simulate
-      // Actually, we compute a proper MD5 via string manipulation
       const md5Hash = await computeMd5(qr_data);
-      
       return new Response(JSON.stringify({ md5: md5Hash }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
+    // Check payment status
     if (action === "check_payment" && md5) {
-      // Check payment status via Bakong API
-      const response = await fetch(`${BAKONG_API}/check_transaction_by_md5`, {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${BAKONG_TOKEN}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ md5 }),
-      });
+      try {
+        const response = await fetch(`${BAKONG_API}/v1/check_transaction_by_md5`, {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${BAKONG_TOKEN}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ md5 }),
+        });
 
-      const data = await response.json();
-      return new Response(JSON.stringify(data), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+        const text = await response.text();
+        let data;
+        try {
+          data = JSON.parse(text);
+        } catch {
+          // API returned non-JSON (HTML error page etc.)
+          data = { responseCode: -1, responseMessage: "UNPAID", rawStatus: response.status };
+        }
+        
+        return new Response(JSON.stringify(data), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      } catch (fetchErr) {
+        // Network error - return UNPAID status
+        return new Response(JSON.stringify({ 
+          responseCode: -1, 
+          responseMessage: "UNPAID",
+          error: fetchErr instanceof Error ? fetchErr.message : "Network error"
+        }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
     }
 
-    if (action === "generate_qr") {
-      // Generate KHQR string
-      const { bank_account, merchant_name, merchant_city, amount, currency, store_label, phone_number, bill_number, terminal_label } = await req.json().catch(() => ({}));
-      
-      const response = await fetch(`${BAKONG_API}/generate_qr_code`, {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${BAKONG_TOKEN}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          bank_account: bank_account || "dara_mao@bkrt",
-          merchant_name: merchant_name || "Daratool_support",
-          merchant_city: merchant_city || "Phnom Penh",
-          amount: amount || 0,
-          currency: currency || "USD",
-          store_label: store_label || "Daratoolsupport",
-          phone_number: phone_number || "855974640130",
-          bill_number: bill_number || `TRX${Date.now()}`,
-          terminal_label: terminal_label || "Cashier-01",
-        }),
-      });
-
-      const data = await response.json();
-      return new Response(JSON.stringify(data), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
+    // Get payment details
     if (action === "get_payment" && md5) {
-      // Get payment info
-      const response = await fetch(`${BAKONG_API}/check_transaction_by_md5`, {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${BAKONG_TOKEN}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ md5 }),
-      });
+      try {
+        const response = await fetch(`${BAKONG_API}/v1/check_transaction_by_md5`, {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${BAKONG_TOKEN}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ md5 }),
+        });
 
-      const data = await response.json();
-      return new Response(JSON.stringify(data), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+        const text = await response.text();
+        let data;
+        try {
+          data = JSON.parse(text);
+        } catch {
+          data = { responseCode: -1, responseMessage: "Unable to fetch payment info" };
+        }
+
+        return new Response(JSON.stringify(data), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      } catch (fetchErr) {
+        return new Response(JSON.stringify({ 
+          responseCode: -1,
+          error: fetchErr instanceof Error ? fetchErr.message : "Network error"
+        }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
     }
 
-    return new Response(JSON.stringify({ error: "Invalid action. Use: check_payment, generate_qr, generate_md5, get_payment" }), {
+    return new Response(JSON.stringify({ error: "Invalid action. Use: check_payment, generate_md5, get_payment" }), {
       status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (error) {
