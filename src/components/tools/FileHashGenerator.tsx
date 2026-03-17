@@ -1,7 +1,8 @@
 import { useState, useRef } from "react";
 import { useI18n } from "@/lib/i18n";
 import { Button } from "@/components/ui/button";
-import { Upload, Copy, Check } from "lucide-react";
+import { Upload, Copy, Check, Download } from "lucide-react";
+import { toast } from "sonner";
 
 const FileHashGenerator: React.FC = () => {
   const { t } = useI18n();
@@ -30,7 +31,19 @@ const FileHashGenerator: React.FC = () => {
   const copyHash = (hash: string) => {
     navigator.clipboard.writeText(hash);
     setCopied(hash);
+    toast.success("បានចម្លង!");
     setTimeout(() => setCopied(""), 2000);
+  };
+
+  const downloadHashes = () => {
+    const content = `File: ${fileName}\n${"=".repeat(40)}\n${hashes.map(h => `${h.algo}: ${h.hash}`).join("\n")}`;
+    const blob = new Blob([content], { type: "text/plain" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `${fileName}-hashes.txt`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+    toast.success("ទាញយកជោគជ័យ!");
   };
 
   return (
@@ -59,6 +72,9 @@ const FileHashGenerator: React.FC = () => {
               <code className="block break-all font-english text-xs">{h.hash}</code>
             </div>
           ))}
+          <Button variant="outline" onClick={downloadHashes} className="w-full gap-2">
+            <Download className="h-4 w-4" /> រក្សាទុក Hash
+          </Button>
         </div>
       )}
     </div>

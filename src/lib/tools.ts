@@ -41,7 +41,8 @@ export type ToolId =
   | "gif_maker" | "calendar_tool" | "expense_tracker" | "kanban_board"
   | "mood_tracker" | "journal" | "timer_intervals" | "speed_test"
   | "text_encryptor" | "uuid_generator" | "cron_parser" | "aspect_ratio"
-  | "font_preview";
+  | "font_preview"
+  | "video_translator";
 
 export interface ToolMeta {
   id: ToolId;
@@ -157,4 +158,5 @@ export const tools: ToolMeta[] = [
   { id: "stopwatch", icon: Timer, category: "utilities" },
   { id: "weather", icon: CloudSun, category: "utilities" },
   { id: "speed_test", icon: Gauge, category: "utilities" },
+  { id: "video_translator", icon: Languages, category: "media" },
 ];

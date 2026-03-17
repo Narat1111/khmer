@@ -2,7 +2,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { useI18n } from "@/lib/i18n";
-import { Check, Copy, Minimize2, Maximize2 } from "lucide-react";
+import { Check, Copy, Minimize2, Maximize2, Download } from "lucide-react";
+import { toast } from "sonner";
 
 const JSONFormatter: React.FC = () => {
   const { t } = useI18n();
@@ -19,7 +20,17 @@ const JSONFormatter: React.FC = () => {
     } catch (e: any) { setError(e.message); }
   };
 
-  const copy = () => { navigator.clipboard.writeText(output || input); setCopied(true); setTimeout(() => setCopied(false), 2000); };
+  const copy = () => { navigator.clipboard.writeText(output || input); setCopied(true); toast.success("បានចម្លង!"); setTimeout(() => setCopied(false), 2000); };
+
+  const download = () => {
+    const blob = new Blob([output || input], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "formatted.json";
+    a.click();
+    URL.revokeObjectURL(a.href);
+    toast.success("ទាញយកជោគជ័យ!");
+  };
 
   return (
     <div className="space-y-4">
@@ -33,6 +44,9 @@ const JSONFormatter: React.FC = () => {
         <Button onClick={() => format(0)} variant="outline" className="flex-1"><Minimize2 className="h-4 w-4" />Minify</Button>
         <Button onClick={copy} variant="outline" size="icon">
           {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+        </Button>
+        <Button onClick={download} variant="outline" size="icon">
+          <Download className="h-4 w-4" />
         </Button>
       </div>
       {error && <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-sm text-destructive">❌ {error}</motion.p>}

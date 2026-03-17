@@ -2,7 +2,8 @@ import { useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Copy, Check } from "lucide-react";
+import { Copy, Check, Download } from "lucide-react";
+import { toast } from "sonner";
 
 const Base64Encoder: React.FC = () => {
   const { t } = useI18n();
@@ -28,7 +29,18 @@ const Base64Encoder: React.FC = () => {
   const handleCopy = () => {
     navigator.clipboard.writeText(output);
     setCopied(true);
+    toast.success("បានចម្លង!");
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleDownload = () => {
+    const blob = new Blob([output], { type: "text/plain" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `base64-${mode}d.txt`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+    toast.success("ទាញយកជោគជ័យ!");
   };
 
   return (
@@ -59,10 +71,15 @@ const Base64Encoder: React.FC = () => {
           <div className="rounded-lg border bg-accent/50 p-3">
             <code className="block break-all font-english text-sm">{output}</code>
           </div>
-          <Button variant="outline" onClick={handleCopy} className="w-full gap-2">
-            {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-            {copied ? t.copied : t.copy}
-          </Button>
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={handleCopy} className="flex-1 gap-2">
+              {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+              {copied ? t.copied : t.copy}
+            </Button>
+            <Button variant="outline" onClick={handleDownload} className="flex-1 gap-2">
+              <Download className="h-4 w-4" /> {t.download}
+            </Button>
+          </div>
         </div>
       )}
     </div>

@@ -104,6 +104,7 @@ const toolsKm = {
   cron_parser: { name: "Cron Parser", desc: "វិភាគកន្សោម Cron" },
   aspect_ratio: { name: "គណនាសមាមាត្រ", desc: "គណនាសមាមាត្ររូបភាព" },
   font_preview: { name: "មើលពុម្ពអក្សរ", desc: "មើលពុម្ពអក្សរផ្សេងៗជាមុន" },
+  video_translator: { name: "បកប្រែវីដេអូ", desc: "បង្ហោះវីដេអូ បកប្រែអត្ថបទរងទៅខ្មែរ" },
 } as const;
 
 const toolsEn = {
@@ -208,6 +209,7 @@ const toolsEn = {
   cron_parser: { name: "Cron Parser", desc: "Parse and build cron expressions" },
   aspect_ratio: { name: "Aspect Ratio Calc", desc: "Calculate image aspect ratios" },
   font_preview: { name: "Font Preview", desc: "Preview different fonts" },
+  video_translator: { name: "Video Translator", desc: "Upload video and translate subtitles to Khmer" },
 } as const;
 
 const dict = {
