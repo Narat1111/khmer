@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import { Button } from "@/components/ui/button";
-import { Bluetooth, Loader2, CheckCircle, XCircle } from "lucide-react";
+import { Bluetooth, Loader2, CheckCircle, XCircle, Smartphone, AlertTriangle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface BluetoothDevice {
@@ -16,13 +16,25 @@ const BluetoothChecker: React.FC = () => {
   const [devices, setDevices] = useState<BluetoothDevice[]>([]);
   const [error, setError] = useState("");
 
+  const isWebBluetoothSupported = () => {
+    return typeof navigator !== "undefined" && "bluetooth" in navigator;
+  };
+
   const checkBluetooth = async () => {
     setError("");
-    setDevices([]);
 
-    if (!("bluetooth" in navigator)) {
+    if (!isWebBluetoothSupported()) {
       setSupported(false);
-      setError("Web Bluetooth API is not supported in this browser. Try Chrome or Edge.");
+      setError(
+        "Web Bluetooth is not supported in this browser. Please use Chrome, Edge, or Opera on desktop/Android. iOS Safari does not support Web Bluetooth."
+      );
+      return;
+    }
+
+    // Check if running in secure context
+    if (!window.isSecureContext) {
+      setSupported(false);
+      setError("Bluetooth requires a secure (HTTPS) connection.");
       return;
     }
 
@@ -32,13 +44,25 @@ const BluetoothChecker: React.FC = () => {
     try {
       const device = await (navigator as any).bluetooth.requestDevice({
         acceptAllDevices: true,
+        optionalServices: ["battery_service", "device_information"],
       });
-      setDevices((prev) => [
-        ...prev,
-        { name: device.name || "Unknown Device", id: device.id },
-      ]);
+      
+      const newDevice = {
+        name: device.name || "Unknown Device",
+        id: device.id,
+      };
+      
+      setDevices((prev) => {
+        // Avoid duplicates
+        if (prev.find(d => d.id === newDevice.id)) return prev;
+        return [...prev, newDevice];
+      });
     } catch (err: any) {
-      if (err.name !== "NotFoundError") {
+      if (err.name === "NotFoundError") {
+        // User cancelled the picker - not an error
+      } else if (err.name === "SecurityError") {
+        setError("Bluetooth access was blocked. This feature requires HTTPS and user gesture.");
+      } else {
         setError(err.message || "Failed to scan for devices");
       }
     } finally {
@@ -54,23 +78,44 @@ const BluetoothChecker: React.FC = () => {
         className="flex flex-col items-center gap-4"
       >
         <motion.div
-          animate={{ scale: [1, 1.05, 1] }}
+          animate={{ 
+            scale: [1, 1.05, 1],
+            boxShadow: [
+              "0 0 0 0 hsl(var(--primary) / 0.2)",
+              "0 0 0 12px hsl(var(--primary) / 0)",
+              "0 0 0 0 hsl(var(--primary) / 0.2)",
+            ] 
+          }}
           transition={{ repeat: Infinity, duration: 2 }}
           className="flex h-20 w-20 items-center justify-center rounded-full bg-primary/10"
         >
           <Bluetooth className="h-10 w-10 text-primary" />
         </motion.div>
 
-        <Button onClick={checkBluetooth} disabled={scanning} size="lg">
+        <Button onClick={checkBluetooth} disabled={scanning} size="lg" className="gap-2">
           {scanning ? (
             <>
               <Loader2 className="h-4 w-4 animate-spin" />
               Scanning...
             </>
           ) : (
-            "Scan for Bluetooth Devices"
+            <>
+              <Bluetooth className="h-4 w-4" />
+              Scan for Bluetooth Devices
+            </>
           )}
         </Button>
+
+        {!isWebBluetoothSupported() && supported === null && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="flex items-center gap-2 rounded-xl bg-yellow-500/10 p-3 text-sm text-yellow-600 dark:text-yellow-400"
+          >
+            <AlertTriangle className="h-4 w-4 shrink-0" />
+            <span>Web Bluetooth may not be supported on your browser/device. Try Chrome on Android or desktop.</span>
+          </motion.div>
+        )}
       </motion.div>
 
       {supported !== null && (
@@ -78,7 +123,7 @@ const BluetoothChecker: React.FC = () => {
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           className={`flex items-center gap-3 rounded-xl p-4 ${
-            supported ? "bg-green-500/10 text-green-600" : "bg-destructive/10 text-destructive"
+            supported ? "bg-green-500/10 text-green-600 dark:text-green-400" : "bg-destructive/10 text-destructive"
           }`}
         >
           {supported ? <CheckCircle className="h-5 w-5" /> : <XCircle className="h-5 w-5" />}
@@ -89,11 +134,7 @@ const BluetoothChecker: React.FC = () => {
       )}
 
       {error && (
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="text-sm text-destructive"
-        >
+        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-sm text-destructive">
           {error}
         </motion.p>
       )}
@@ -105,7 +146,7 @@ const BluetoothChecker: React.FC = () => {
             animate={{ opacity: 1, height: "auto" }}
             className="space-y-2"
           >
-            <h3 className="text-sm font-bold">Found Devices:</h3>
+            <h3 className="text-sm font-bold">Found Devices ({devices.length}):</h3>
             {devices.map((d, i) => (
               <motion.div
                 key={d.id}
@@ -114,13 +155,17 @@ const BluetoothChecker: React.FC = () => {
                 transition={{ delay: i * 0.1 }}
                 className="flex items-center gap-3 rounded-lg border bg-card p-3"
               >
-                <Bluetooth className="h-4 w-4 text-primary" />
+                <Smartphone className="h-4 w-4 text-primary" />
                 <div>
                   <p className="text-sm font-medium">{d.name}</p>
                   <p className="text-xs text-muted-foreground">{d.id}</p>
                 </div>
               </motion.div>
             ))}
+            <Button onClick={checkBluetooth} variant="outline" className="w-full gap-2 mt-2">
+              <Bluetooth className="h-4 w-4" />
+              Scan More Devices
+            </Button>
           </motion.div>
         )}
       </AnimatePresence>

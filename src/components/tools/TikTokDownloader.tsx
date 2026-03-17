@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Loader2, Download, AlertCircle, Play } from "lucide-react";
+import { Loader2, Download, AlertCircle, Play, Music, Film } from "lucide-react";
 import { motion } from "framer-motion";
 
 const TikTokDownloader: React.FC = () => {
@@ -11,6 +11,7 @@ const TikTokDownloader: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<any>(null);
   const [error, setError] = useState("");
+  const [downloading, setDownloading] = useState<string | null>(null);
 
   const handleDownload = async () => {
     if (!url.trim()) return;
@@ -18,37 +19,36 @@ const TikTokDownloader: React.FC = () => {
     setError("");
     setData(null);
 
-    // Try multiple APIs for reliability
     const apis = [
       async () => {
-        const res = await fetch(`https://www.tikwm.com/api/?url=${encodeURIComponent(url)}`);
+        const res = await fetch(`https://www.tikwm.com/api/?url=${encodeURIComponent(url)}&hd=1`);
+        const json = await res.json();
+        if (json.code === 0 && json.data) {
+          return {
+            title: json.data.title || "TikTok Video",
+            video: `https://www.tikwm.com${json.data.play}`,
+            videoHD: json.data.hdplay ? `https://www.tikwm.com${json.data.hdplay}` : null,
+            music: json.data.music ? `https://www.tikwm.com${json.data.music}` : null,
+            cover: json.data.cover,
+            author: json.data.author?.nickname || json.data.author?.unique_id,
+          };
+        }
+        throw new Error("Invalid");
+      },
+      async () => {
+        const res = await fetch(`https://tikwm.com/api/?url=${encodeURIComponent(url)}`);
         const json = await res.json();
         if (json.code === 0 && json.data) {
           return {
             title: json.data.title || "TikTok Video",
             video: json.data.play,
-            videoHD: json.data.hdplay,
-            music: json.data.music,
+            videoHD: json.data.hdplay || null,
+            music: json.data.music || null,
             cover: json.data.cover,
             author: json.data.author?.nickname,
           };
         }
-        throw new Error("Invalid response");
-      },
-      async () => {
-        const res = await fetch(`https://api.tiklydown.eu.org/api/download?url=${encodeURIComponent(url)}`);
-        if (!res.ok) throw new Error("API error");
-        const json = await res.json();
-        if (json.video) {
-          return {
-            title: json.title || "TikTok Video",
-            video: json.video,
-            videoHD: json.video,
-            cover: json.images?.[0],
-            author: json.author,
-          };
-        }
-        throw new Error("Invalid response");
+        throw new Error("Invalid");
       },
     ];
 
@@ -63,8 +63,32 @@ const TikTokDownloader: React.FC = () => {
       }
     }
 
-    setError(t.error + " — មិនអាចទាញយកវីដេអូបានទេ។ សូមពិនិត្យតំណរភ្ជាប់ម្ដងទៀត");
+    setError("មិនអាចទាញយកវីដេអូបានទេ។ សូមពិនិត្យតំណរភ្ជាប់ម្ដងទៀត");
     setLoading(false);
+  };
+
+  // Download file to phone by fetching blob and triggering download
+  const downloadFile = async (fileUrl: string, filename: string, type: string) => {
+    setDownloading(type);
+    try {
+      const response = await fetch(fileUrl);
+      const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = blobUrl;
+      a.download = filename;
+      a.style.display = "none";
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(blobUrl);
+      }, 100);
+    } catch {
+      // Fallback: open in new tab
+      window.open(fileUrl, "_blank");
+    }
+    setDownloading(null);
   };
 
   return (
@@ -73,7 +97,7 @@ const TikTokDownloader: React.FC = () => {
         <Input
           value={url}
           onChange={(e) => setUrl(e.target.value)}
-          placeholder={t.paste_url}
+          placeholder={t.paste_url || "Paste TikTok URL..."}
           className="flex-1"
           onKeyDown={(e) => e.key === "Enter" && handleDownload()}
         />
@@ -91,46 +115,53 @@ const TikTokDownloader: React.FC = () => {
 
       {data && (
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
-          {/* Preview */}
           {data.cover && (
             <div className="relative overflow-hidden rounded-xl border">
-              <img src={data.cover} alt="cover" className="w-full object-cover" style={{ maxHeight: 300 }} />
+              <img src={data.cover} alt="cover" className="w-full object-cover" style={{ maxHeight: 300 }} crossOrigin="anonymous" />
               <div className="absolute inset-0 flex items-center justify-center bg-black/30">
                 <Play className="h-12 w-12 text-white drop-shadow-lg" fill="white" />
               </div>
             </div>
           )}
 
-          {/* Info */}
           <div className="rounded-xl border bg-card p-3">
             {data.author && <p className="text-xs text-muted-foreground">@{data.author}</p>}
             {data.title && <p className="mt-1 text-sm font-medium leading-snug">{data.title}</p>}
           </div>
 
-          {/* Download buttons */}
           <div className="flex flex-col gap-2">
             {data.videoHD && (
-              <a href={data.videoHD} target="_blank" rel="noopener noreferrer" download>
-                <Button className="w-full gap-2" size="lg">
-                  <Download className="h-4 w-4" />
-                  {t.download} — HD
-                </Button>
-              </a>
+              <Button
+                className="w-full gap-2"
+                size="lg"
+                onClick={() => downloadFile(data.videoHD, `tiktok-hd-${Date.now()}.mp4`, "hd")}
+                disabled={downloading === "hd"}
+              >
+                {downloading === "hd" ? <Loader2 className="h-4 w-4 animate-spin" /> : <Film className="h-4 w-4" />}
+                {t.download} — HD Video
+              </Button>
             )}
-            {data.video && data.video !== data.videoHD && (
-              <a href={data.video} target="_blank" rel="noopener noreferrer" download>
-                <Button variant="outline" className="w-full gap-2">
-                  <Download className="h-4 w-4" />
-                  {t.download} — SD
-                </Button>
-              </a>
+            {data.video && (
+              <Button
+                variant="outline"
+                className="w-full gap-2"
+                onClick={() => downloadFile(data.video, `tiktok-${Date.now()}.mp4`, "sd")}
+                disabled={downloading === "sd"}
+              >
+                {downloading === "sd" ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
+                {t.download} — Video
+              </Button>
             )}
             {data.music && (
-              <a href={data.music} target="_blank" rel="noopener noreferrer" download>
-                <Button variant="secondary" className="w-full gap-2">
-                  🎵 {t.download} Music
-                </Button>
-              </a>
+              <Button
+                variant="secondary"
+                className="w-full gap-2"
+                onClick={() => downloadFile(data.music, `tiktok-music-${Date.now()}.mp3`, "music")}
+                disabled={downloading === "music"}
+              >
+                {downloading === "music" ? <Loader2 className="h-4 w-4 animate-spin" /> : <Music className="h-4 w-4" />}
+                🎵 {t.download} Music
+              </Button>
             )}
           </div>
         </motion.div>
