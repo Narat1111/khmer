@@ -77,7 +77,9 @@ const TikTokDownloader: React.FC = () => {
   const downloadFile = async (fileUrl: string, filename: string, type: string) => {
     setDownloading(type);
     try {
-      const response = await fetch(fileUrl);
+      // Try blob download first
+      const response = await fetch(fileUrl, { mode: "cors" });
+      if (!response.ok) throw new Error("fetch failed");
       const blob = await response.blob();
       const blobUrl = URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -91,8 +93,19 @@ const TikTokDownloader: React.FC = () => {
         URL.revokeObjectURL(blobUrl);
       }, 100);
     } catch {
-      // Fallback: open in new tab
-      window.open(fileUrl, "_blank");
+      // Fallback: use direct link with download attribute, then window.open
+      try {
+        const a = document.createElement("a");
+        a.href = fileUrl;
+        a.download = filename;
+        a.target = "_blank";
+        a.rel = "noopener noreferrer";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      } catch {
+        window.open(fileUrl, "_blank");
+      }
     }
     setDownloading(null);
   };
