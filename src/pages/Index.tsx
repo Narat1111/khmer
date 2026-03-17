@@ -9,7 +9,6 @@ import { motion } from "framer-motion";
 const Index = () => {
   const { t } = useI18n();
   const [query, setQuery] = useState("");
-  const [showSearch, setShowSearch] = useState(false);
 
   const filtered = useMemo(() => {
     if (!query.trim()) return tools;
@@ -22,12 +21,10 @@ const Index = () => {
 
   const categories = ["media", "productivity", "utilities"] as const;
 
-  // Cmd+K shortcut
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if ((e.metaKey || e.ctrlKey) && e.key === "k") {
       e.preventDefault();
-      setShowSearch(true);
-      setTimeout(() => document.getElementById("tool-search")?.focus(), 50);
+      document.getElementById("tool-search")?.focus();
     }
   }, []);
 
@@ -99,7 +96,12 @@ const Index = () => {
               transition={{ delay: 0.2 }}
             >
               <div className="mb-4 flex items-center gap-3">
-                <div className="h-1 w-6 rounded-full bg-primary" />
+                <motion.div
+                  className="h-1 w-6 rounded-full bg-primary"
+                  initial={{ width: 0 }}
+                  animate={{ width: 24 }}
+                  transition={{ delay: 0.3, duration: 0.4 }}
+                />
                 <h2 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">
                   {t.categories[cat]}
                 </h2>
