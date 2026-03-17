@@ -107,6 +107,7 @@ const toolComponents: Record<ToolId, React.LazyExoticComponent<React.FC>> = {
   cron_parser: lazy(() => import("@/components/tools/CronParser")),
   aspect_ratio: lazy(() => import("@/components/tools/AspectRatioCalc")),
   font_preview: lazy(() => import("@/components/tools/FontPreview")),
+  video_translator: lazy(() => import("@/components/tools/VideoTranslator")),
 };
 
 const ToolPage = () => {

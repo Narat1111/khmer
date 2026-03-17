@@ -158,4 +158,5 @@ export const tools: ToolMeta[] = [
   { id: "stopwatch", icon: Timer, category: "utilities" },
   { id: "weather", icon: CloudSun, category: "utilities" },
   { id: "speed_test", icon: Gauge, category: "utilities" },
+  { id: "video_translator", icon: Languages, category: "media" },
 ];

@@ -204,4 +204,5 @@ export const toolIcons: Partial<Record<ToolId, string>> = {
   cron_parser: toolCron,
   aspect_ratio: toolAspect,
   font_preview: toolFont,
+  video_translator: toolTranslator,
 };

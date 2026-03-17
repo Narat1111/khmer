@@ -209,6 +209,7 @@ const toolsEn = {
   cron_parser: { name: "Cron Parser", desc: "Parse and build cron expressions" },
   aspect_ratio: { name: "Aspect Ratio Calc", desc: "Calculate image aspect ratios" },
   font_preview: { name: "Font Preview", desc: "Preview different fonts" },
+  video_translator: { name: "Video Translator", desc: "Upload video and translate subtitles to Khmer" },
 } as const;
 
 const dict = {
