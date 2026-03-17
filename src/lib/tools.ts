@@ -1,12 +1,12 @@
 import {
   Video, Mic, ImageDown, QrCode, KeyRound, Ruler, DollarSign,
-  CaseSensitive, FileText, Palette, Dice5, Timer, CloudSun, Hash, Binary,
+  CaseSensitive, FileText, Palette, Dice5, Timer, CloudSun, Hash, Binary, MessageSquare,
 } from "lucide-react";
 
 export type ToolId =
   | "tiktok" | "voice" | "image_compress" | "qr" | "password"
   | "unit" | "currency" | "text_case" | "word_count" | "color"
-  | "random" | "stopwatch" | "weather" | "hash" | "base64";
+  | "random" | "stopwatch" | "weather" | "hash" | "base64" | "ai_chat";
 
 export interface ToolMeta {
   id: ToolId;
@@ -15,6 +15,7 @@ export interface ToolMeta {
 }
 
 export const tools: ToolMeta[] = [
+  { id: "ai_chat", icon: MessageSquare, category: "media" },
   { id: "tiktok", icon: Video, category: "media" },
   { id: "voice", icon: Mic, category: "media" },
   { id: "image_compress", icon: ImageDown, category: "media" },

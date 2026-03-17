@@ -29,6 +29,7 @@ const dict = {
       utilities: "ឧបករណ៍",
     },
     tools: {
+      ai_chat: { name: "AI ជជែក", desc: "ជជែកជាមួយ AI ជំនួយការឆ្លាតវៃ" },
       tiktok: { name: "ទាញយកវីដេអូ TikTok", desc: "ទាញយកវីដេអូ TikTok គ្មាន Watermark" },
       voice: { name: "សំឡេង AI", desc: "បំប្លែងអត្ថបទទៅជាសំឡេង" },
       image_compress: { name: "បង្រួមរូបភាព", desc: "បង្រួមទំហំរូបភាពដោយរក្សាគុណភាព" },
@@ -72,6 +73,7 @@ const dict = {
       utilities: "Utilities",
     },
     tools: {
+      ai_chat: { name: "AI Chat", desc: "Chat with an intelligent AI assistant" },
       tiktok: { name: "TikTok Downloader", desc: "Download TikTok videos without watermark" },
       voice: { name: "Voice AI", desc: "Convert text to natural speech" },
       image_compress: { name: "Image Compressor", desc: "Compress images while keeping quality" },
