@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { Copy, Check, Download } from "lucide-react";
+import { toast } from "sonner";
 
 const buttons = [
   ["C", "±", "%", "÷"],
@@ -14,6 +16,8 @@ const Calculator: React.FC = () => {
   const [prev, setPrev] = useState<number | null>(null);
   const [op, setOp] = useState<string | null>(null);
   const [fresh, setFresh] = useState(true);
+  const [history, setHistory] = useState<string[]>([]);
+  const [copied, setCopied] = useState(false);
 
   const handleBtn = (btn: string) => {
     if (btn === "C") { setDisplay("0"); setPrev(null); setOp(null); setFresh(true); return; }
@@ -34,7 +38,10 @@ const Calculator: React.FC = () => {
       else if (op === "−") result = prev - cur;
       else if (op === "×") result = prev * cur;
       else if (op === "÷") result = cur !== 0 ? prev / cur : 0;
-      setDisplay(String(Math.round(result * 1e10) / 1e10));
+      const r = Math.round(result * 1e10) / 1e10;
+      const entry = `${prev} ${op} ${cur} = ${r}`;
+      setHistory(h => [entry, ...h].slice(0, 20));
+      setDisplay(String(r));
       setPrev(null); setOp(null); setFresh(true);
       return;
     }
@@ -42,12 +49,44 @@ const Calculator: React.FC = () => {
     else { setDisplay((d) => d === "0" && btn !== "." ? btn : d + btn); }
   };
 
+  const copyResult = () => {
+    navigator.clipboard.writeText(display);
+    setCopied(true);
+    toast.success("Copied: " + display);
+    setTimeout(() => setCopied(false), 1500);
+  };
+
+  const saveHistory = () => {
+    if (!history.length) return;
+    const blob = new Blob([history.join("\n")], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = "calculator-history.txt";
+    a.click(); URL.revokeObjectURL(url);
+    toast.success("History saved!");
+  };
+
   const isOp = (b: string) => ["+", "−", "×", "÷"].includes(b);
 
   return (
     <div className="mx-auto max-w-xs space-y-3">
-      <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="rounded-xl bg-muted p-4 text-right">
-        <p className="text-3xl font-bold font-english tabular-nums truncate">{display}</p>
+      <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="rounded-xl bg-muted p-4">
+        <div className="flex items-center justify-between">
+          <div className="flex gap-1">
+            <button onClick={copyResult} className="p-1 rounded text-muted-foreground hover:text-foreground">
+              {copied ? <Check className="h-4 w-4 text-primary" /> : <Copy className="h-4 w-4" />}
+            </button>
+            {history.length > 0 && (
+              <button onClick={saveHistory} className="p-1 rounded text-muted-foreground hover:text-foreground">
+                <Download className="h-4 w-4" />
+              </button>
+            )}
+          </div>
+          <p className="text-3xl font-bold font-english tabular-nums truncate">{display}</p>
+        </div>
+        {op && prev !== null && (
+          <p className="text-xs text-muted-foreground text-right mt-1">{prev} {op}</p>
+        )}
       </motion.div>
       <div className="grid grid-cols-4 gap-2">
         {buttons.flat().map((btn, i) => (
@@ -70,6 +109,14 @@ const Calculator: React.FC = () => {
           </motion.button>
         ))}
       </div>
+      {history.length > 0 && (
+        <div className="rounded-xl border bg-card p-3 max-h-32 overflow-y-auto">
+          <p className="text-xs font-medium text-muted-foreground mb-1">History</p>
+          {history.map((h, i) => (
+            <p key={i} className="text-xs font-english text-muted-foreground">{h}</p>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
