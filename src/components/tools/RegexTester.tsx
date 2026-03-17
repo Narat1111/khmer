@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { motion } from "framer-motion";
@@ -7,21 +7,16 @@ const RegexTester: React.FC = () => {
   const [pattern, setPattern] = useState("\\b\\w+@\\w+\\.\\w+\\b");
   const [flags, setFlags] = useState("gi");
   const [text, setText] = useState("Contact us at hello@example.com or support@test.org for help.");
-  const [error, setError] = useState("");
 
-  const getMatches = () => {
+  const { matches, error } = useMemo(() => {
     try {
       const re = new RegExp(pattern, flags);
-      setError("");
-      const matches = [...text.matchAll(re)];
-      return matches;
+      const m = [...text.matchAll(re)];
+      return { matches: m, error: "" };
     } catch (e: any) {
-      setError(e.message);
-      return [];
+      return { matches: [] as RegExpMatchArray[], error: e.message };
     }
-  };
-
-  const matches = getMatches();
+  }, [pattern, flags, text]);
 
   return (
     <div className="space-y-4">
