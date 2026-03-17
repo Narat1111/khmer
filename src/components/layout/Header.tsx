@@ -1,5 +1,5 @@
 import { useI18n } from "@/lib/i18n";
-import { Globe, Sun, Moon } from "lucide-react";
+import { Globe, Sun, Moon, Heart } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/hooks/use-theme";
@@ -24,6 +24,17 @@ export function Header() {
         </Link>
 
         <div className="flex items-center gap-1.5 sm:gap-2">
+          <Link to="/support">
+            <motion.div
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              className="flex h-8 items-center gap-1 rounded-lg border border-destructive/30 bg-destructive/10 px-2 text-xs font-medium text-destructive transition-colors hover:bg-destructive/20 sm:h-9 sm:px-3 sm:text-sm"
+            >
+              <Heart className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+              <span className="hidden sm:inline">{lang === "km" ? "គាំទ្រ" : "Support"}</span>
+            </motion.div>
+          </Link>
+
           <motion.button
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
