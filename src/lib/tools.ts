@@ -9,6 +9,10 @@ import {
   Grid3X3, Quote, MonitorPlay, CheckSquare, LayoutGrid, ScanText, ImageMinus,
   FunctionSquare, SlidersHorizontal, HelpCircle, Laugh,
   MicIcon, BookOpen, Wallet, Grid2X2, Crown, Hash as HashIcon, Layers, FileUp,
+  Presentation, GitBranch, GraduationCap, Music, Eye, FileSpreadsheet, Table2,
+  CodeXml, Maximize, FileOutput, Scissors, Film, Image, Calendar, DollarSign as DollarIcon,
+  Columns, Smile as SmileIcon, BookMarked, TimerReset, Gauge, Lock, Fingerprint,
+  ClockIcon, RatioIcon, TypeIcon,
 } from "lucide-react";
 
 export type ToolId =
@@ -29,7 +33,15 @@ export type ToolId =
   | "character_map" | "image_to_text" | "bg_remover" | "ai_math"
   | "image_enhancer" | "quiz" | "meme_maker"
   | "audio_recorder" | "flashcard_maker" | "budget_planner" | "pixel_art"
-  | "chess_game" | "sudoku" | "game_2048" | "pdf_merger";
+  | "chess_game" | "sudoku" | "game_2048" | "pdf_merger"
+  // 25 new tools
+  | "whiteboard" | "mind_map" | "flashcard_quiz" | "music_player"
+  | "color_blindness" | "json_to_csv" | "csv_editor" | "markdown_to_html"
+  | "image_resizer" | "pdf_to_image" | "audio_trimmer" | "video_trimmer"
+  | "gif_maker" | "calendar_tool" | "expense_tracker" | "kanban_board"
+  | "mood_tracker" | "journal" | "timer_intervals" | "speed_test"
+  | "text_encryptor" | "uuid_generator" | "cron_parser" | "aspect_ratio"
+  | "font_preview";
 
 export interface ToolMeta {
   id: ToolId;
@@ -51,6 +63,12 @@ export const tools: ToolMeta[] = [
   { id: "screen_recorder", icon: MonitorPlay, category: "media" },
   { id: "audio_recorder", icon: MicIcon, category: "media" },
   { id: "pdf_merger", icon: FileUp, category: "media" },
+  { id: "music_player", icon: Music, category: "media" },
+  { id: "image_resizer", icon: Maximize, category: "media" },
+  { id: "pdf_to_image", icon: FileOutput, category: "media" },
+  { id: "audio_trimmer", icon: Scissors, category: "media" },
+  { id: "video_trimmer", icon: Film, category: "media" },
+  { id: "gif_maker", icon: Image, category: "media" },
   // Developer
   { id: "code_editor", icon: Code, category: "developer" },
   { id: "json_formatter", icon: Braces, category: "developer" },
@@ -64,6 +82,12 @@ export const tools: ToolMeta[] = [
   { id: "lorem_ipsum", icon: Type, category: "developer" },
   { id: "css_shadow", icon: BoxSelect, category: "developer" },
   { id: "morse_code", icon: Radio, category: "developer" },
+  { id: "json_to_csv", icon: FileSpreadsheet, category: "developer" },
+  { id: "csv_editor", icon: Table2, category: "developer" },
+  { id: "markdown_to_html", icon: CodeXml, category: "developer" },
+  { id: "uuid_generator", icon: Fingerprint, category: "developer" },
+  { id: "cron_parser", icon: Clock, category: "developer" },
+  { id: "text_encryptor", icon: Lock, category: "developer" },
   // Productivity
   { id: "qr", icon: QrCode, category: "productivity" },
   { id: "password", icon: KeyRound, category: "productivity" },
@@ -75,6 +99,14 @@ export const tools: ToolMeta[] = [
   { id: "countdown_timer", icon: Hourglass, category: "productivity" },
   { id: "quote_gen", icon: Quote, category: "productivity" },
   { id: "flashcard_maker", icon: BookOpen, category: "productivity" },
+  { id: "whiteboard", icon: Presentation, category: "productivity" },
+  { id: "mind_map", icon: GitBranch, category: "productivity" },
+  { id: "calendar_tool", icon: Calendar, category: "productivity" },
+  { id: "kanban_board", icon: Columns, category: "productivity" },
+  { id: "journal", icon: BookMarked, category: "productivity" },
+  { id: "timer_intervals", icon: TimerReset, category: "productivity" },
+  { id: "mood_tracker", icon: SmileIcon, category: "productivity" },
+  { id: "expense_tracker", icon: DollarIcon, category: "productivity" },
   // Design
   { id: "color", icon: Palette, category: "design" },
   { id: "gradient_generator", icon: Paintbrush, category: "design" },
@@ -85,6 +117,9 @@ export const tools: ToolMeta[] = [
   { id: "barcode_gen", icon: Barcode, category: "design" },
   { id: "meme_maker", icon: Laugh, category: "design" },
   { id: "pixel_art", icon: Grid2X2, category: "design" },
+  { id: "color_blindness", icon: Eye, category: "design" },
+  { id: "font_preview", icon: TypeIcon, category: "design" },
+  { id: "aspect_ratio", icon: RatioIcon, category: "design" },
   // Games
   { id: "snake_game", icon: Gamepad2, category: "games" },
   { id: "lucky_wheel", icon: CircleDot, category: "games" },
@@ -98,6 +133,7 @@ export const tools: ToolMeta[] = [
   { id: "chess_game", icon: Crown, category: "games" },
   { id: "sudoku", icon: HashIcon, category: "games" },
   { id: "game_2048", icon: Layers, category: "games" },
+  { id: "flashcard_quiz", icon: GraduationCap, category: "games" },
   // Finance
   { id: "calculator", icon: Calculator, category: "finance" },
   { id: "currency", icon: DollarSign, category: "finance" },
@@ -120,4 +156,5 @@ export const tools: ToolMeta[] = [
   { id: "word_count", icon: FileText, category: "utilities" },
   { id: "stopwatch", icon: Timer, category: "utilities" },
   { id: "weather", icon: CloudSun, category: "utilities" },
+  { id: "speed_test", icon: Gauge, category: "utilities" },
 ];

@@ -167,7 +167,7 @@ const Index = () => {
 
           {/* Bottom */}
           <div className="mt-8 border-t pt-6 text-center">
-            <p className="text-xs text-muted-foreground">© 2026 DaraTool — Version 0.5 • {tools.length} Free Tools</p>
+            <p className="text-xs text-muted-foreground">© 2026 DaraTool • {tools.length} Free Tools</p>
           </div>
         </div>
       </footer>
