@@ -21,12 +21,12 @@ serve(async (req) => {
     const { action, md5, qr_data } = await req.json();
 
     if (action === "generate_md5" && qr_data) {
-      // Generate MD5 hash for QR data
+      // Generate MD5 hash using a simple implementation
       const encoder = new TextEncoder();
       const data = encoder.encode(qr_data);
-      const hashBuffer = await crypto.subtle.digest("MD5", data);
-      const hashArray = Array.from(new Uint8Array(hashBuffer));
-      const md5Hash = hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+      // Use SHA-256 as MD5 isn't available in Web Crypto, then truncate to simulate
+      // Actually, we compute a proper MD5 via string manipulation
+      const md5Hash = await computeMd5(qr_data);
       
       return new Response(JSON.stringify({ md5: md5Hash }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
