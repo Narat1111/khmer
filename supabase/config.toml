@@ -2,3 +2,6 @@ project_id = "vqcedyplmovqqwmjwlzb"
 
 [functions.ai-chat]
 verify_jwt = false
+
+[functions.bakong-khqr]
+verify_jwt = false
