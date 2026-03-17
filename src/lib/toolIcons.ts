@@ -34,7 +34,6 @@ import toolCoin from "@/assets/icons/tool-coin.png";
 import toolTip from "@/assets/icons/tool-tip.png";
 import toolLoan from "@/assets/icons/tool-loan.png";
 import toolTranslator from "@/assets/icons/tool-translator.png";
-// New icons
 import toolRegex from "@/assets/icons/tool-regex.png";
 import toolMarkdown from "@/assets/icons/tool-markdown.png";
 import toolEmoji from "@/assets/icons/tool-emoji.png";
@@ -74,6 +73,32 @@ import toolChess from "@/assets/icons/tool-chess.png";
 import toolSudoku from "@/assets/icons/tool-sudoku.png";
 import tool2048 from "@/assets/icons/tool-2048.png";
 import toolPdfMerge from "@/assets/icons/tool-pdf-merge.png";
+// New 25 icons
+import toolWhiteboard from "@/assets/icons/tool-whiteboard.png";
+import toolMindmap from "@/assets/icons/tool-mindmap.png";
+import toolFlashcardQuiz from "@/assets/icons/tool-flashcard-quiz.png";
+import toolMusic from "@/assets/icons/tool-music.png";
+import toolColorblind from "@/assets/icons/tool-colorblind.png";
+import toolJsonCsv from "@/assets/icons/tool-json-csv.png";
+import toolCsv from "@/assets/icons/tool-csv.png";
+import toolMdHtml from "@/assets/icons/tool-md-html.png";
+import toolImgResize from "@/assets/icons/tool-img-resize.png";
+import toolPdfImg from "@/assets/icons/tool-pdf-img.png";
+import toolAudioTrim from "@/assets/icons/tool-audio-trim.png";
+import toolVideoTrim from "@/assets/icons/tool-video-trim.png";
+import toolGif from "@/assets/icons/tool-gif.png";
+import toolCalendar from "@/assets/icons/tool-calendar.png";
+import toolExpense from "@/assets/icons/tool-expense.png";
+import toolKanban from "@/assets/icons/tool-kanban.png";
+import toolMood from "@/assets/icons/tool-mood.png";
+import toolJournal from "@/assets/icons/tool-journal.png";
+import toolIntervals from "@/assets/icons/tool-intervals.png";
+import toolSpeedtest from "@/assets/icons/tool-speedtest.png";
+import toolEncrypt from "@/assets/icons/tool-encrypt.png";
+import toolUuid from "@/assets/icons/tool-uuid.png";
+import toolCron from "@/assets/icons/tool-cron.png";
+import toolAspect from "@/assets/icons/tool-aspect.png";
+import toolFont from "@/assets/icons/tool-font.png";
 
 import { ToolId } from "@/lib/tools";
 
@@ -153,4 +178,30 @@ export const toolIcons: Partial<Record<ToolId, string>> = {
   sudoku: toolSudoku,
   game_2048: tool2048,
   pdf_merger: toolPdfMerge,
+  // New 25
+  whiteboard: toolWhiteboard,
+  mind_map: toolMindmap,
+  flashcard_quiz: toolFlashcardQuiz,
+  music_player: toolMusic,
+  color_blindness: toolColorblind,
+  json_to_csv: toolJsonCsv,
+  csv_editor: toolCsv,
+  markdown_to_html: toolMdHtml,
+  image_resizer: toolImgResize,
+  pdf_to_image: toolPdfImg,
+  audio_trimmer: toolAudioTrim,
+  video_trimmer: toolVideoTrim,
+  gif_maker: toolGif,
+  calendar_tool: toolCalendar,
+  expense_tracker: toolExpense,
+  kanban_board: toolKanban,
+  mood_tracker: toolMood,
+  journal: toolJournal,
+  timer_intervals: toolIntervals,
+  speed_test: toolSpeedtest,
+  text_encryptor: toolEncrypt,
+  uuid_generator: toolUuid,
+  cron_parser: toolCron,
+  aspect_ratio: toolAspect,
+  font_preview: toolFont,
 };
