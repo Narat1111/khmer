@@ -150,6 +150,14 @@ const toolsEn = {
   ai_math: { name: "AI Math Solver", desc: "Solve math expressions step by step" },
   quiz: { name: "Quiz", desc: "Test your general knowledge" },
   meme_maker: { name: "Meme Maker", desc: "Create funny meme images" },
+  audio_recorder: { name: "Audio Recorder", desc: "Record audio from your microphone" },
+  flashcard_maker: { name: "Flashcard Maker", desc: "Learn with flashcards" },
+  budget_planner: { name: "Budget Planner", desc: "Track income and expenses" },
+  pixel_art: { name: "Pixel Art Editor", desc: "Create pixel art drawings" },
+  chess_game: { name: "Chess Game", desc: "Play chess on the board" },
+  sudoku: { name: "Sudoku", desc: "Classic number puzzle" },
+  game_2048: { name: "2048 Game", desc: "Slide and merge number tiles" },
+  pdf_merger: { name: "PDF Merger", desc: "Merge multiple PDF files" },
 } as const;
 
 const dict = {
