@@ -8,6 +8,7 @@ import {
   Link2, BinaryIcon, LetterText, Thermometer, Radio, Dices, Swords, Brain,
   Grid3X3, Quote, MonitorPlay, CheckSquare, LayoutGrid, ScanText, ImageMinus,
   FunctionSquare, SlidersHorizontal, HelpCircle, Laugh,
+  MicIcon, BookOpen, Wallet, Grid2X2, Crown, Hash as HashIcon, Layers, FileUp,
 } from "lucide-react";
 
 export type ToolId =
@@ -19,7 +20,6 @@ export type ToolId =
   | "snake_game" | "lucky_wheel" | "todo_list" | "notes" | "pomodoro"
   | "json_formatter" | "gradient_generator" | "flip_coin" | "tip_calculator"
   | "loan_calculator" | "translator"
-  // New tools
   | "markdown_preview" | "regex_tester" | "lorem_ipsum" | "emoji_picker"
   | "draw_board" | "barcode_gen" | "percentage_calc" | "date_diff"
   | "countdown_timer" | "color_palette" | "css_shadow" | "text_diff"
@@ -27,7 +27,9 @@ export type ToolId =
   | "morse_code" | "dice_roller" | "rock_paper" | "memory_game"
   | "tic_tac_toe" | "quote_gen" | "screen_recorder" | "habit_tracker"
   | "character_map" | "image_to_text" | "bg_remover" | "ai_math"
-  | "image_enhancer" | "quiz" | "meme_maker";
+  | "image_enhancer" | "quiz" | "meme_maker"
+  | "audio_recorder" | "flashcard_maker" | "budget_planner" | "pixel_art"
+  | "chess_game" | "sudoku" | "game_2048" | "pdf_merger";
 
 export interface ToolMeta {
   id: ToolId;
@@ -47,6 +49,8 @@ export const tools: ToolMeta[] = [
   { id: "bg_remover", icon: ImageMinus, category: "media" },
   { id: "image_enhancer", icon: SlidersHorizontal, category: "media" },
   { id: "screen_recorder", icon: MonitorPlay, category: "media" },
+  { id: "audio_recorder", icon: MicIcon, category: "media" },
+  { id: "pdf_merger", icon: FileUp, category: "media" },
   // Developer
   { id: "code_editor", icon: Code, category: "developer" },
   { id: "json_formatter", icon: Braces, category: "developer" },
@@ -70,6 +74,7 @@ export const tools: ToolMeta[] = [
   { id: "habit_tracker", icon: CheckSquare, category: "productivity" },
   { id: "countdown_timer", icon: Hourglass, category: "productivity" },
   { id: "quote_gen", icon: Quote, category: "productivity" },
+  { id: "flashcard_maker", icon: BookOpen, category: "productivity" },
   // Design
   { id: "color", icon: Palette, category: "design" },
   { id: "gradient_generator", icon: Paintbrush, category: "design" },
@@ -79,6 +84,7 @@ export const tools: ToolMeta[] = [
   { id: "character_map", icon: LayoutGrid, category: "design" },
   { id: "barcode_gen", icon: Barcode, category: "design" },
   { id: "meme_maker", icon: Laugh, category: "design" },
+  { id: "pixel_art", icon: Grid2X2, category: "design" },
   // Games
   { id: "snake_game", icon: Gamepad2, category: "games" },
   { id: "lucky_wheel", icon: CircleDot, category: "games" },
@@ -89,6 +95,9 @@ export const tools: ToolMeta[] = [
   { id: "memory_game", icon: Brain, category: "games" },
   { id: "tic_tac_toe", icon: Grid3X3, category: "games" },
   { id: "quiz", icon: HelpCircle, category: "games" },
+  { id: "chess_game", icon: Crown, category: "games" },
+  { id: "sudoku", icon: HashIcon, category: "games" },
+  { id: "game_2048", icon: Layers, category: "games" },
   // Finance
   { id: "calculator", icon: Calculator, category: "finance" },
   { id: "currency", icon: DollarSign, category: "finance" },
@@ -101,6 +110,7 @@ export const tools: ToolMeta[] = [
   { id: "roman_numeral", icon: LetterText, category: "finance" },
   { id: "temperature", icon: Thermometer, category: "finance" },
   { id: "ai_math", icon: FunctionSquare, category: "finance" },
+  { id: "budget_planner", icon: Wallet, category: "finance" },
   // Utilities
   { id: "bluetooth", icon: Bluetooth, category: "utilities" },
   { id: "wifi", icon: Wifi, category: "utilities" },

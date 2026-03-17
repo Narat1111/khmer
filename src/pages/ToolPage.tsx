@@ -74,6 +74,14 @@ const toolComponents: Record<ToolId, React.LazyExoticComponent<React.FC>> = {
   image_enhancer: lazy(() => import("@/components/tools/ImageEnhancer")),
   quiz: lazy(() => import("@/components/tools/Quiz")),
   meme_maker: lazy(() => import("@/components/tools/MemeMaker")),
+  audio_recorder: lazy(() => import("@/components/tools/AudioRecorder")),
+  flashcard_maker: lazy(() => import("@/components/tools/FlashcardMaker")),
+  budget_planner: lazy(() => import("@/components/tools/BudgetPlanner")),
+  pixel_art: lazy(() => import("@/components/tools/PixelArtEditor")),
+  chess_game: lazy(() => import("@/components/tools/ChessGame")),
+  sudoku: lazy(() => import("@/components/tools/SudokuGame")),
+  game_2048: lazy(() => import("@/components/tools/Game2048")),
+  pdf_merger: lazy(() => import("@/components/tools/PdfMerger")),
 };
 
 const ToolPage = () => {
