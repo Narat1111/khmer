@@ -1,10 +1,12 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { useI18n } from "@/lib/i18n";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Download, QrCode, Camera, ScanLine } from "lucide-react";
+import { Download, QrCode, Camera, ScanLine, Copy, ExternalLink, RotateCcw, Check } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import jsQR from "jsqr";
+import { toast } from "sonner";
 
 const QRCodeGenerator: React.FC = () => {
   const { t } = useI18n();
@@ -13,10 +15,11 @@ const QRCodeGenerator: React.FC = () => {
   const [scanResult, setScanResult] = useState("");
   const [scanning, setScanning] = useState(false);
   const [isBakong, setIsBakong] = useState(false);
+  const [copied, setCopied] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
-  const intervalRef = useRef<number | null>(null);
+  const animFrameRef = useRef<number | null>(null);
 
   const qrUrl = text.trim()
     ? `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(text)}&size=300x300`
@@ -35,74 +38,85 @@ const QRCodeGenerator: React.FC = () => {
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
+      toast.success("QR Code saved!");
     } catch {
       window.open(qrUrl, "_blank");
     }
   };
 
+  const handleScanResult = useCallback((value: string) => {
+    setScanResult(value);
+    const isBakongQR = value.includes("bakong") || value.includes("nbc.org.kh") || value.startsWith("0002") || value.includes("KHQR");
+    setIsBakong(isBakongQR);
+    stopScan();
+
+    // Auto-copy
+    navigator.clipboard.writeText(value).then(() => {
+      toast.success("📋 Copied to clipboard!");
+    }).catch(() => {});
+
+    // Auto-open if URL
+    if (value.startsWith("http://") || value.startsWith("https://")) {
+      setTimeout(() => {
+        window.open(value, "_blank");
+        toast.info("🔗 Opening link...");
+      }, 800);
+    }
+  }, []);
+
+  const scanFrame = useCallback(() => {
+    if (!videoRef.current || !canvasRef.current || videoRef.current.readyState < 2) {
+      animFrameRef.current = requestAnimationFrame(scanFrame);
+      return;
+    }
+
+    const video = videoRef.current;
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    ctx.drawImage(video, 0, 0);
+
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const code = jsQR(imageData.data, imageData.width, imageData.height, { inversionAttempts: "dontInvert" });
+
+    if (code && code.data) {
+      handleScanResult(code.data);
+      return;
+    }
+
+    animFrameRef.current = requestAnimationFrame(scanFrame);
+  }, [handleScanResult]);
+
   const startScan = async () => {
     setScanResult("");
     setIsBakong(false);
+    setCopied(false);
     setScanning(true);
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: "environment" },
+        video: { facingMode: "environment", width: { ideal: 1280 }, height: { ideal: 720 } },
       });
       streamRef.current = stream;
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
         videoRef.current.play();
       }
-      // Use BarcodeDetector API if available
-      if ("BarcodeDetector" in window) {
-        const detector = new (window as any).BarcodeDetector({ formats: ["qr_code"] });
-        intervalRef.current = window.setInterval(async () => {
-          if (!videoRef.current || videoRef.current.readyState < 2) return;
-          try {
-            const barcodes = await detector.detect(videoRef.current);
-            if (barcodes.length > 0) {
-              const value = barcodes[0].rawValue;
-              handleScanResult(value);
-            }
-          } catch {}
-        }, 300);
-      } else {
-        // Fallback: use canvas + external API
-        intervalRef.current = window.setInterval(async () => {
-          if (!videoRef.current || !canvasRef.current || videoRef.current.readyState < 2) return;
-          const canvas = canvasRef.current;
-          const ctx = canvas.getContext("2d");
-          if (!ctx) return;
-          canvas.width = videoRef.current.videoWidth;
-          canvas.height = videoRef.current.videoHeight;
-          ctx.drawImage(videoRef.current, 0, 0);
-          const dataUrl = canvas.toDataURL("image/png");
-          try {
-            const res = await fetch(`https://api.qrserver.com/v1/read-qr-code/?fileurl=${encodeURIComponent(dataUrl)}`);
-            const json = await res.json();
-            const value = json?.[0]?.symbol?.[0]?.data;
-            if (value) handleScanResult(value);
-          } catch {}
-        }, 1000);
-      }
+      // Start scanning frames with jsQR
+      animFrameRef.current = requestAnimationFrame(scanFrame);
     } catch {
       setScanResult("Camera access denied. Please allow camera permission.");
       setScanning(false);
+      toast.error("Camera access denied");
     }
   };
 
-  const handleScanResult = (value: string) => {
-    setScanResult(value);
-    // Detect Bakong QR
-    const isBakongQR = value.includes("bakong") || value.includes("nbc.org.kh") || value.startsWith("0002") || value.includes("KHQR");
-    setIsBakong(isBakongQR);
-    stopScan();
-  };
-
   const stopScan = () => {
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
+    if (animFrameRef.current) {
+      cancelAnimationFrame(animFrameRef.current);
+      animFrameRef.current = null;
     }
     if (streamRef.current) {
       streamRef.current.getTracks().forEach((tr) => tr.stop());
@@ -111,13 +125,20 @@ const QRCodeGenerator: React.FC = () => {
     setScanning(false);
   };
 
+  const copyResult = async () => {
+    await navigator.clipboard.writeText(scanResult);
+    setCopied(true);
+    toast.success("Copied!");
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   useEffect(() => {
     return () => stopScan();
   }, []);
 
   return (
     <div className="space-y-4">
-      <Tabs value={tab} onValueChange={setTab}>
+      <Tabs value={tab} onValueChange={(v) => { setTab(v); if (v !== "scan") stopScan(); }}>
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="generate" className="gap-2">
             <QrCode className="h-4 w-4" /> Generate
@@ -168,6 +189,9 @@ const QRCodeGenerator: React.FC = () => {
                 >
                   <ScanLine className="h-10 w-10 text-primary" />
                 </motion.div>
+                <p className="text-sm text-muted-foreground text-center">
+                  Auto-scan • Auto-copy • Auto-open links
+                </p>
                 <Button onClick={startScan} size="lg" className="gap-2">
                   <Camera className="h-4 w-4" />
                   Open Camera & Scan QR
@@ -184,8 +208,16 @@ const QRCodeGenerator: React.FC = () => {
                     animate={{ top: ["20%", "80%", "20%"] }}
                     transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
                   />
+                  {/* Corner markers */}
+                  <div className="absolute top-4 left-4 w-8 h-8 border-t-2 border-l-2 border-primary rounded-tl-lg" />
+                  <div className="absolute top-4 right-4 w-8 h-8 border-t-2 border-r-2 border-primary rounded-tr-lg" />
+                  <div className="absolute bottom-4 left-4 w-8 h-8 border-b-2 border-l-2 border-primary rounded-bl-lg" />
+                  <div className="absolute bottom-4 right-4 w-8 h-8 border-b-2 border-r-2 border-primary rounded-br-lg" />
                 </div>
                 <canvas ref={canvasRef} className="hidden" />
+                <p className="text-xs text-muted-foreground text-center animate-pulse">
+                  🔍 Scanning for QR code...
+                </p>
                 <Button onClick={stopScan} variant="destructive" className="w-full">
                   Stop Scanning
                 </Button>
@@ -199,26 +231,38 @@ const QRCodeGenerator: React.FC = () => {
                 className="w-full space-y-3"
               >
                 {isBakong && (
-                  <div className="flex items-center gap-2 rounded-xl bg-blue-500/10 p-3 text-blue-600 dark:text-blue-400">
+                  <motion.div
+                    initial={{ scale: 0.9 }}
+                    animate={{ scale: 1 }}
+                    className="flex items-center gap-2 rounded-xl bg-blue-500/10 p-3 text-blue-600 dark:text-blue-400"
+                  >
                     <span className="text-lg">🏦</span>
                     <span className="text-sm font-bold">Bakong / KHQR Payment Detected</span>
-                  </div>
+                  </motion.div>
                 )}
+
                 <div className="rounded-xl border bg-card p-4">
-                  <p className="text-xs text-muted-foreground mb-1">Scan Result:</p>
+                  <p className="text-xs text-muted-foreground mb-1">✅ Scan Result (auto-copied):</p>
                   <p className="text-sm font-medium break-all">{scanResult}</p>
+                  {scanResult.startsWith("http") && (
+                    <p className="text-xs text-primary mt-1">🔗 Link auto-opened in new tab</p>
+                  )}
                 </div>
+
                 <div className="flex gap-2">
                   <Button
                     variant="outline"
                     className="flex-1 gap-2"
-                    onClick={() => navigator.clipboard.writeText(scanResult)}
+                    onClick={copyResult}
                   >
-                    📋 Copy
+                    {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                    {copied ? "Copied!" : "Copy"}
                   </Button>
                   {scanResult.startsWith("http") && (
                     <a href={scanResult} target="_blank" rel="noopener noreferrer" className="flex-1">
-                      <Button className="w-full gap-2">🔗 Open Link</Button>
+                      <Button className="w-full gap-2">
+                        <ExternalLink className="h-4 w-4" /> Open Link
+                      </Button>
                     </a>
                   )}
                   <Button
@@ -226,7 +270,7 @@ const QRCodeGenerator: React.FC = () => {
                     className="flex-1 gap-2"
                     onClick={() => { setScanResult(""); setIsBakong(false); startScan(); }}
                   >
-                    🔄 Scan Again
+                    <RotateCcw className="h-4 w-4" /> Scan Again
                   </Button>
                 </div>
               </motion.div>
