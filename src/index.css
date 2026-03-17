@@ -58,39 +58,39 @@
   }
 
   .dark {
-    --background: 222 47% 11%;
-    --foreground: 210 40% 98%;
+    --background: 20 14% 8%;
+    --foreground: 38 35% 92%;
 
-    --card: 222 47% 14%;
-    --card-foreground: 210 40% 98%;
+    --card: 20 12% 12%;
+    --card-foreground: 38 35% 92%;
 
-    --popover: 222 47% 14%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 20 12% 12%;
+    --popover-foreground: 38 35% 92%;
 
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222 47% 11%;
+    --primary: 38 72% 56%;
+    --primary-foreground: 20 14% 8%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 20 10% 16%;
+    --secondary-foreground: 38 35% 92%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 20 10% 16%;
+    --muted-foreground: 30 12% 55%;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 28 50% 18%;
+    --accent-foreground: 38 35% 92%;
 
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 38 35% 92%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 217.2 91.2% 59.8%;
+    --border: 25 12% 18%;
+    --input: 25 12% 18%;
+    --ring: 38 72% 56%;
 
-    --tool-card-bg: 222 47% 14%;
-    --tool-card-hover-border: 217.2 91.2% 59.8%;
-    --tool-icon-bg: 217.2 32.6% 17.5%;
-    --tool-icon-hover-bg: 217.2 91.2% 25%;
-    --search-bg: 217.2 32.6% 17.5%;
+    --tool-card-bg: 20 12% 12%;
+    --tool-card-hover-border: 38 72% 56%;
+    --tool-icon-bg: 25 12% 16%;
+    --tool-icon-hover-bg: 38 50% 22%;
+    --search-bg: 20 10% 14%;
   }
 }
 
