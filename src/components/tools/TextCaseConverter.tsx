@@ -2,7 +2,8 @@ import { useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Copy, Check } from "lucide-react";
+import { Copy, Check, Download } from "lucide-react";
+import { toast } from "sonner";
 
 const TextCaseConverter: React.FC = () => {
   const { t } = useI18n();
@@ -25,7 +26,18 @@ const TextCaseConverter: React.FC = () => {
   const handleCopy = () => {
     navigator.clipboard.writeText(text);
     setCopied(true);
+    toast.success("បានចម្លង!");
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleDownload = () => {
+    const blob = new Blob([text], { type: "text/plain" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "converted-text.txt";
+    a.click();
+    URL.revokeObjectURL(a.href);
+    toast.success("ទាញយកជោគជ័យ!");
   };
 
   return (
@@ -38,10 +50,15 @@ const TextCaseConverter: React.FC = () => {
           </Button>
         ))}
       </div>
-      <Button variant="outline" onClick={handleCopy} disabled={!text} className="w-full gap-2">
-        {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-        {copied ? t.copied : t.copy}
-      </Button>
+      <div className="flex gap-2">
+        <Button variant="outline" onClick={handleCopy} disabled={!text} className="flex-1 gap-2">
+          {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+          {copied ? t.copied : t.copy}
+        </Button>
+        <Button variant="outline" onClick={handleDownload} disabled={!text} className="flex-1 gap-2">
+          <Download className="h-4 w-4" /> {t.download}
+        </Button>
+      </div>
     </div>
   );
 };

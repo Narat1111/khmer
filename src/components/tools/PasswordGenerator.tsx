@@ -1,7 +1,8 @@
 import { useState, useCallback } from "react";
 import { useI18n } from "@/lib/i18n";
 import { Button } from "@/components/ui/button";
-import { Copy, RefreshCw, Check } from "lucide-react";
+import { Copy, RefreshCw, Check, Download } from "lucide-react";
+import { toast } from "sonner";
 
 const PasswordGenerator: React.FC = () => {
   const { t } = useI18n();
@@ -12,6 +13,7 @@ const PasswordGenerator: React.FC = () => {
   const [symbols, setSymbols] = useState(true);
   const [password, setPassword] = useState("");
   const [copied, setCopied] = useState(false);
+  const [history, setHistory] = useState<string[]>([]);
 
   const generate = useCallback(() => {
     let chars = "";
@@ -22,14 +24,29 @@ const PasswordGenerator: React.FC = () => {
     if (!chars) chars = "abcdefghijklmnopqrstuvwxyz";
     const arr = new Uint32Array(length);
     crypto.getRandomValues(arr);
-    setPassword(Array.from(arr, (v) => chars[v % chars.length]).join(""));
+    const pw = Array.from(arr, (v) => chars[v % chars.length]).join("");
+    setPassword(pw);
+    setHistory((prev) => [pw, ...prev].slice(0, 10));
     setCopied(false);
   }, [length, upper, lower, digits, symbols]);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(password);
     setCopied(true);
+    toast.success("បានចម្លង!");
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const downloadPasswords = () => {
+    if (history.length === 0) return;
+    const content = history.map((pw, i) => `${i + 1}. ${pw}`).join("\n");
+    const blob = new Blob([`Generated Passwords\n${"=".repeat(30)}\n${content}`], { type: "text/plain" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "passwords.txt";
+    a.click();
+    URL.revokeObjectURL(a.href);
+    toast.success("ទាញយកជោគជ័យ!");
   };
 
   return (
@@ -68,6 +85,12 @@ const PasswordGenerator: React.FC = () => {
         <RefreshCw className="h-4 w-4" />
         {t.generate}
       </Button>
+      
+      {history.length > 0 && (
+        <Button variant="outline" onClick={downloadPasswords} className="w-full gap-2">
+          <Download className="h-4 w-4" /> រក្សាទុកពាក្យសម្ងាត់ ({history.length})
+        </Button>
+      )}
     </div>
   );
 };
