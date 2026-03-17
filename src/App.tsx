@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { I18nProvider } from "@/lib/i18n";
 import Index from "./pages/Index.tsx";
 import ToolPage from "./pages/ToolPage.tsx";
+import SupportPage from "./pages/SupportPage.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
