@@ -2,11 +2,12 @@ import { useState, useEffect, useCallback } from "react";
 import { Header } from "@/components/layout/Header";
 import { useI18n } from "@/lib/i18n";
 import { motion } from "framer-motion";
-import { Heart, Copy, Check, ExternalLink, Smartphone, Loader2, RefreshCw, CheckCircle2 } from "lucide-react";
+import { Heart, Copy, Check, ExternalLink, Smartphone, Loader2, RefreshCw, CheckCircle2, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import daraAvatar from "@/assets/dara-avatar.png";
+import bakongIcon from "@/assets/icons/bakong-icon.png";
 
 const BAKONG_ACCOUNT = "dara_mao@bkrt";
 const MERCHANT_NAME = "Daratool Support";
@@ -41,10 +42,10 @@ const SupportPage = () => {
         body: { action: "check_payment", md5: md5Hash },
       });
       if (error) throw error;
-      
+
       const status = data?.responseMessage || data?.status || "UNPAID";
       setPaymentStatus(status);
-      
+
       if (status === "PAID" || status === "SUCCESS") {
         toast.success(lang === "km" ? "ការទូទាត់ជោគជ័យ! សូមអរគុណ! 🙏❤️" : "Payment successful! Thank you! 🙏❤️");
       }
@@ -55,7 +56,6 @@ const SupportPage = () => {
     }
   }, [md5Hash, lang]);
 
-  // Generate MD5 on mount
   useEffect(() => {
     const generateMd5 = async () => {
       try {
@@ -70,10 +70,9 @@ const SupportPage = () => {
     generateMd5();
   }, []);
 
-  // Auto-check payment every 5 seconds when md5 is available
   useEffect(() => {
     if (!md5Hash || paymentStatus === "PAID" || paymentStatus === "SUCCESS") return;
-    const interval = setInterval(checkPayment, 5000);
+    const interval = setInterval(checkPayment, 8000);
     return () => clearInterval(interval);
   }, [md5Hash, paymentStatus, checkPayment]);
 
@@ -95,7 +94,7 @@ const SupportPage = () => {
       <Header />
       <div className="container max-w-lg py-6 px-4">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
-          
+
           {/* Hero */}
           <div className="text-center space-y-3">
             <motion.div
@@ -116,7 +115,7 @@ const SupportPage = () => {
             </p>
           </div>
 
-          {/* Payment Success Banner */}
+          {/* Payment Success */}
           {isPaid && (
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
@@ -128,9 +127,7 @@ const SupportPage = () => {
                 {lang === "km" ? "ការទូទាត់ជោគជ័យ!" : "Payment Successful!"}
               </h2>
               <p className="text-sm text-muted-foreground">
-                {lang === "km"
-                  ? "សូមអរគុណច្រើនសម្រាប់ការគាំទ្ររបស់អ្នក! ❤️🙏"
-                  : "Thank you so much for your support! ❤️🙏"}
+                {lang === "km" ? "សូមអរគុណច្រើនសម្រាប់ការគាំទ្រ! ❤️🙏" : "Thank you for your support! ❤️🙏"}
               </p>
             </motion.div>
           )}
@@ -142,21 +139,31 @@ const SupportPage = () => {
             transition={{ delay: 0.2 }}
             className="rounded-2xl border-2 border-primary/20 bg-card p-5 space-y-4"
           >
+            {/* Bakong Header */}
             <div className="flex items-center gap-2 justify-center">
-              <div className="bg-destructive text-destructive-foreground text-xs font-bold px-2 py-1 rounded-md">
-                BAKONG
-              </div>
-              <span className="text-sm font-bold">KHQR</span>
+              <motion.img
+                src={bakongIcon}
+                alt="Bakong"
+                className="h-8 w-8 object-contain"
+                animate={{ rotate: [0, -5, 5, 0] }}
+                transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+              />
+              <span className="text-sm font-bold">BAKONG KHQR</span>
             </div>
 
             {/* QR Code */}
             <div className="flex justify-center">
-              <div className="bg-white p-3 rounded-xl shadow-lg">
+              <motion.div
+                className="bg-white p-3 rounded-xl shadow-lg"
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ type: "spring", bounce: 0.4, delay: 0.3 }}
+              >
                 <img src={generateQrUrl()} alt="Bakong KHQR" className="w-48 h-48" />
-              </div>
+              </motion.div>
             </div>
 
-            {/* Status indicator */}
+            {/* Scan instruction */}
             <div className="flex items-center justify-center gap-2">
               <Smartphone className="h-3 w-3 text-muted-foreground" />
               <span className="text-xs text-muted-foreground">
@@ -167,7 +174,11 @@ const SupportPage = () => {
 
             {/* Payment Status */}
             {md5Hash && !isPaid && (
-              <div className="flex items-center justify-center gap-2">
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="flex items-center justify-center gap-2"
+              >
                 <div className="h-2 w-2 rounded-full bg-yellow-500 animate-pulse" />
                 <span className="text-xs text-muted-foreground">
                   {lang === "km" ? "កំពុងរង់ចាំការទូទាត់..." : "Waiting for payment..."}
@@ -175,7 +186,7 @@ const SupportPage = () => {
                 <Button size="sm" variant="ghost" onClick={checkPayment} disabled={checking} className="h-6 px-2">
                   <RefreshCw className={`h-3 w-3 ${checking ? "animate-spin" : ""}`} />
                 </Button>
-              </div>
+              </motion.div>
             )}
 
             {/* Account Info */}
@@ -201,9 +212,12 @@ const SupportPage = () => {
                 {lang === "km" ? "ជ្រើសរើសចំនួន" : "Choose amount"}
               </p>
               <div className="grid grid-cols-3 gap-2">
-                {amounts.map((amt) => (
+                {amounts.map((amt, i) => (
                   <motion.button
                     key={amt.usd}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.1 * i }}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => setSelectedAmount(selectedAmount === amt.usd ? null : amt.usd)}
@@ -223,24 +237,70 @@ const SupportPage = () => {
 
             {/* Open Bakong Button */}
             <Button onClick={openBakong} className="w-full gap-2" size="lg">
-              <ExternalLink className="h-4 w-4" />
+              <img src={bakongIcon} alt="" className="h-5 w-5 object-contain" />
               {lang === "km" ? "បើក Bakong App" : "Open Bakong App"}
             </Button>
           </motion.div>
 
-          {/* Thank You Message */}
+          {/* How to Use */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.4 }}
+            transition={{ delay: 0.3 }}
+            className="rounded-xl border bg-card p-4 space-y-3"
+          >
+            <div className="flex items-center gap-2">
+              <Info className="h-4 w-4 text-primary" />
+              <h3 className="text-sm font-bold">{lang === "km" ? "របៀបបង់ប្រាក់" : "How to Pay"}</h3>
+            </div>
+            <ol className="space-y-2 text-xs text-muted-foreground">
+              {(lang === "km" ? [
+                "បើក Bakong App នៅលើទូរស័ព្ទរបស់អ្នក",
+                "ចុច 'Scan QR' ហើយស្កេន QR Code ខាងលើ",
+                "បញ្ចូលចំនួនទឹកប្រាក់ដែលអ្នកចង់គាំទ្រ",
+                "បញ្ជាក់ការទូទាត់ ✅",
+                "ប្រព័ន្ធនឹងផ្ទៀងផ្ទាត់ដោយស្វ័យប្រវត្តិ!"
+              ] : [
+                "Open Bakong App on your phone",
+                "Tap 'Scan QR' and scan the QR code above",
+                "Enter the amount you want to support",
+                "Confirm the payment ✅",
+                "System will auto-verify!"
+              ]).map((step, i) => (
+                <motion.li
+                  key={i}
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.4 + i * 0.1 }}
+                  className="flex items-start gap-2"
+                >
+                  <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-[10px] font-bold text-primary">
+                    {i + 1}
+                  </span>
+                  {step}
+                </motion.li>
+              ))}
+            </ol>
+          </motion.div>
+
+          {/* Thank You */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
             className="rounded-xl border bg-card p-4 text-center space-y-2"
           >
-            <Heart className="h-6 w-6 text-destructive mx-auto" />
+            <motion.div
+              animate={{ scale: [1, 1.2, 1] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+            >
+              <Heart className="h-6 w-6 text-destructive mx-auto" />
+            </motion.div>
             <h3 className="font-bold">{lang === "km" ? "សូមអរគុណ! 🙏" : "Thank You! 🙏"}</h3>
             <p className="text-xs text-muted-foreground">
               {lang === "km"
-                ? "រាល់ការគាំទ្រគឺជួយឱ្យ DaraTool រក្សា 100+ ឧបករណ៍ឥតគិតថ្លៃសម្រាប់មនុស្សគ្រប់គ្នា។ យើងដឹងគុណយ៉ាងខ្លាំង! ❤️"
-                : "Every contribution helps DaraTool maintain 100+ free tools for everyone. We truly appreciate it! ❤️"}
+                ? "រាល់ការគាំទ្រគឺជួយឱ្យ DaraTool រក្សា 100+ ឧបករណ៍ឥតគិតថ្លៃសម្រាប់មនុស្សគ្រប់គ្នា ❤️"
+                : "Every contribution helps DaraTool maintain 100+ free tools for everyone ❤️"}
             </p>
           </motion.div>
 

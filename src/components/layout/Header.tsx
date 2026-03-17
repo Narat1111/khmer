@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/hooks/use-theme";
 import daraAvatar from "@/assets/dara-avatar.png";
+import bakongIcon from "@/assets/icons/bakong-icon.png";
 
 export function Header() {
   const { lang, setLang, t } = useI18n();
@@ -28,10 +29,11 @@ export function Header() {
             <motion.div
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
-              className="flex h-8 items-center gap-1 rounded-lg border border-destructive/30 bg-destructive/10 px-2 text-xs font-medium text-destructive transition-colors hover:bg-destructive/20 sm:h-9 sm:px-3 sm:text-sm"
+              className="flex h-8 items-center gap-1.5 rounded-lg border border-destructive/30 bg-destructive/10 px-2 text-xs font-medium text-destructive transition-colors hover:bg-destructive/20 sm:h-9 sm:px-3 sm:text-sm"
             >
-              <Heart className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+              <img src={bakongIcon} alt="Bakong" className="h-4 w-4 object-contain sm:h-5 sm:w-5" />
               <span className="hidden sm:inline">{lang === "km" ? "គាំទ្រ" : "Support"}</span>
+              <Heart className="h-3 w-3 sm:hidden" />
             </motion.div>
           </Link>
 
