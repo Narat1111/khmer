@@ -73,6 +73,7 @@ const dict = {
       utilities: "Utilities",
     },
     tools: {
+      ai_chat: { name: "AI Chat", desc: "Chat with an intelligent AI assistant" },
       tiktok: { name: "TikTok Downloader", desc: "Download TikTok videos without watermark" },
       voice: { name: "Voice AI", desc: "Convert text to natural speech" },
       image_compress: { name: "Image Compressor", desc: "Compress images while keeping quality" },

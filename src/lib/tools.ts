@@ -15,6 +15,7 @@ export interface ToolMeta {
 }
 
 export const tools: ToolMeta[] = [
+  { id: "ai_chat", icon: MessageSquare, category: "media" },
   { id: "tiktok", icon: Video, category: "media" },
   { id: "voice", icon: Mic, category: "media" },
   { id: "image_compress", icon: ImageDown, category: "media" },

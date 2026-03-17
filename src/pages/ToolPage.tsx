@@ -6,6 +6,7 @@ import { ToolLayout } from "@/components/layout/ToolLayout";
 import { lazy, Suspense } from "react";
 
 const toolComponents: Record<ToolId, React.LazyExoticComponent<React.FC>> = {
+  ai_chat: lazy(() => import("@/components/tools/AIChatTool")),
   tiktok: lazy(() => import("@/components/tools/TikTokDownloader")),
   voice: lazy(() => import("@/components/tools/VoiceAI")),
   image_compress: lazy(() => import("@/components/tools/ImageCompressor")),
