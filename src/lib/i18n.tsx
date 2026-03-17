@@ -66,13 +66,9 @@ const toolsKm = {
   memory_game: { name: "ហ្គេមចងចាំ", desc: "ផ្គូផ្គងកាតស្រដៀងគ្នា" },
   tic_tac_toe: { name: "Tic Tac Toe", desc: "ហ្គេម XO បុរាណ" },
   quote_gen: { name: "ពាក្យស្រង់", desc: "ពាក្យស្រង់ចៃដន្យដែលបំផុសគំនិត" },
-  screen_recorder: { name: "ថតអេក្រង់", desc: "ថតអេក្រង់កុំព្យូទ័រ" },
   habit_tracker: { name: "តាមដានទម្លាប់", desc: "តាមដានទម្លាប់ប្រចាំថ្ងៃ" },
   character_map: { name: "តួអក្សរពិសេស", desc: "ចម្លងសញ្ញា និងនិមិត្តសញ្ញាពិសេស" },
-  image_to_text: { name: "រូបភាព → អត្ថបទ", desc: "ស្កេនអត្ថបទពីរូបភាព OCR" },
-  bg_remover: { name: "ដកផ្ទៃខាងក្រោយ", desc: "ដកផ្ទៃខាងក្រោយរូបភាព" },
   ai_math: { name: "AI គណិតវិទ្យា", desc: "ដោះស្រាយកន្សោមគណិតវិទ្យា" },
-  image_enhancer: { name: "កែលម្អរូបភាព", desc: "កែពន្លឺ កម្រិតពណ៌ របស់រូបភាព" },
   quiz: { name: "ប្រឡងសំណួរ", desc: "សាកល្បងចំណេះដឹងរបស់អ្នក" },
 } as const;
 
