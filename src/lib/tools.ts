@@ -7,7 +7,7 @@ import {
   Barcode, Percent, CalendarDays, Hourglass, SwatchBook, BoxSelect, Diff,
   Link2, BinaryIcon, LetterText, Thermometer, Radio, Dices, Swords, Brain,
   Grid3X3, Quote, MonitorPlay, CheckSquare, LayoutGrid, ScanText, ImageMinus,
-  FunctionSquare, SlidersHorizontal, HelpCircle,
+  FunctionSquare, SlidersHorizontal, HelpCircle, Laugh,
 } from "lucide-react";
 
 export type ToolId =
@@ -27,7 +27,7 @@ export type ToolId =
   | "morse_code" | "dice_roller" | "rock_paper" | "memory_game"
   | "tic_tac_toe" | "quote_gen" | "screen_recorder" | "habit_tracker"
   | "character_map" | "image_to_text" | "bg_remover" | "ai_math"
-  | "image_enhancer" | "quiz";
+  | "image_enhancer" | "quiz" | "meme_maker";
 
 export interface ToolMeta {
   id: ToolId;
@@ -78,6 +78,7 @@ export const tools: ToolMeta[] = [
   { id: "draw_board", icon: PenTool, category: "design" },
   { id: "character_map", icon: LayoutGrid, category: "design" },
   { id: "barcode_gen", icon: Barcode, category: "design" },
+  { id: "meme_maker", icon: Laugh, category: "design" },
   // Games
   { id: "snake_game", icon: Gamepad2, category: "games" },
   { id: "lucky_wheel", icon: CircleDot, category: "games" },

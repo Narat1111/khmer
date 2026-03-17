@@ -73,6 +73,7 @@ const toolComponents: Record<ToolId, React.LazyExoticComponent<React.FC>> = {
   ai_math: lazy(() => import("@/components/tools/AIMath")),
   image_enhancer: lazy(() => import("@/components/tools/ImageEnhancer")),
   quiz: lazy(() => import("@/components/tools/Quiz")),
+  meme_maker: lazy(() => import("@/components/tools/MemeMaker")),
 };
 
 const ToolPage = () => {

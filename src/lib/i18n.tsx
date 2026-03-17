@@ -70,6 +70,7 @@ const toolsKm = {
   character_map: { name: "តួអក្សរពិសេស", desc: "ចម្លងសញ្ញា និងនិមិត្តសញ្ញាពិសេស" },
   ai_math: { name: "AI គណិតវិទ្យា", desc: "ដោះស្រាយកន្សោមគណិតវិទ្យា" },
   quiz: { name: "ប្រឡងសំណួរ", desc: "សាកល្បងចំណេះដឹងរបស់អ្នក" },
+  meme_maker: { name: "បង្កើត Meme", desc: "បង្កើតរូបភាព Meme គួរឱ្យសើច" },
 } as const;
 
 const toolsEn = {
@@ -140,6 +141,7 @@ const toolsEn = {
   character_map: { name: "Character Map", desc: "Copy special symbols & characters" },
   ai_math: { name: "AI Math Solver", desc: "Solve math expressions step by step" },
   quiz: { name: "Quiz", desc: "Test your general knowledge" },
+  meme_maker: { name: "Meme Maker", desc: "Create funny meme images" },
 } as const;
 
 const dict = {
