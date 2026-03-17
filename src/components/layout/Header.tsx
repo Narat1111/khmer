@@ -1,14 +1,40 @@
 import { useI18n } from "@/lib/i18n";
-import { Globe, Sun, Moon, Heart } from "lucide-react";
+import { Globe, Sun, Moon, Heart, LogIn, LogOut, User } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/hooks/use-theme";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { lovable } from "@/integrations/lovable/index";
 import daraAvatar from "@/assets/dara-avatar.png";
 import bakongIcon from "@/assets/icons/bakong-icon.png";
+import type { User as SupaUser } from "@supabase/supabase-js";
 
 export function Header() {
   const { lang, setLang, t } = useI18n();
   const { theme, toggleTheme } = useTheme();
+  const [user, setUser] = useState<SupaUser | null>(null);
+
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+    });
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const handleGoogleSignIn = async () => {
+    await lovable.auth.signInWithOAuth("google", {
+      redirect_uri: window.location.origin,
+    });
+  };
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    setUser(null);
+  };
 
   return (
     <header className="sticky top-0 z-50 border-b bg-background/80 backdrop-blur-sm">
@@ -25,6 +51,46 @@ export function Header() {
         </Link>
 
         <div className="flex items-center gap-1.5 sm:gap-2">
+          {/* Google Sign In / User */}
+          {user ? (
+            <div className="flex items-center gap-1.5">
+              <div className="flex h-8 items-center gap-1.5 rounded-lg border bg-muted/50 px-2 sm:h-9 sm:px-3">
+                {user.user_metadata?.avatar_url ? (
+                  <img src={user.user_metadata.avatar_url} alt="" className="h-5 w-5 rounded-full" />
+                ) : (
+                  <User className="h-3.5 w-3.5 text-muted-foreground" />
+                )}
+                <span className="hidden max-w-[100px] truncate text-xs font-medium sm:inline">
+                  {user.user_metadata?.full_name || user.email?.split("@")[0]}
+                </span>
+              </div>
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={handleSignOut}
+                className="flex h-8 w-8 items-center justify-center rounded-lg border transition-colors hover:bg-destructive/10 hover:text-destructive sm:h-9 sm:w-9"
+                aria-label="Sign out"
+              >
+                <LogOut className="h-4 w-4" />
+              </motion.button>
+            </div>
+          ) : (
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={handleGoogleSignIn}
+              className="flex h-8 items-center gap-1.5 rounded-lg border bg-card px-2 text-xs font-medium transition-colors hover:bg-accent sm:h-9 sm:gap-2 sm:px-3 sm:text-sm"
+            >
+              <svg viewBox="0 0 24 24" className="h-4 w-4">
+                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
+                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+              </svg>
+              <span className="hidden sm:inline">{lang === "km" ? "ចូល" : "Sign in"}</span>
+            </motion.button>
+          )}
+
           <Link to="/support">
             <motion.div
               whileHover={{ scale: 1.1 }}
