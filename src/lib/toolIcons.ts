@@ -14,6 +14,11 @@ import toolStopwatch from "@/assets/icons/tool-stopwatch.png";
 import toolWeather from "@/assets/icons/tool-weather.png";
 import toolHash from "@/assets/icons/tool-hash.png";
 import toolBase64 from "@/assets/icons/tool-base64.png";
+import toolBluetooth from "@/assets/icons/tool-bluetooth.png";
+import toolWifi from "@/assets/icons/tool-wifi.png";
+import toolIpLocation from "@/assets/icons/tool-ip-location.png";
+import toolCodeEditor from "@/assets/icons/tool-code-editor.png";
+import toolImagePdf from "@/assets/icons/tool-image-pdf.png";
 
 import { ToolId } from "@/lib/tools";
 
@@ -34,4 +39,9 @@ export const toolIcons: Record<ToolId, string> = {
   weather: toolWeather,
   hash: toolHash,
   base64: toolBase64,
+  bluetooth: toolBluetooth,
+  wifi: toolWifi,
+  ip_location: toolIpLocation,
+  code_editor: toolCodeEditor,
+  image_pdf: toolImagePdf,
 };

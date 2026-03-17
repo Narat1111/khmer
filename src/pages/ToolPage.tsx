@@ -22,6 +22,11 @@ const toolComponents: Record<ToolId, React.LazyExoticComponent<React.FC>> = {
   weather: lazy(() => import("@/components/tools/WeatherApp")),
   hash: lazy(() => import("@/components/tools/FileHashGenerator")),
   base64: lazy(() => import("@/components/tools/Base64Encoder")),
+  bluetooth: lazy(() => import("@/components/tools/BluetoothChecker")),
+  wifi: lazy(() => import("@/components/tools/WifiChecker")),
+  ip_location: lazy(() => import("@/components/tools/IPLocation")),
+  code_editor: lazy(() => import("@/components/tools/CodeEditor")),
+  image_pdf: lazy(() => import("@/components/tools/ImageToPdf")),
 };
 
 const ToolPage = () => {
