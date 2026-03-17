@@ -104,6 +104,7 @@ const toolsKm = {
   cron_parser: { name: "Cron Parser", desc: "វិភាគកន្សោម Cron" },
   aspect_ratio: { name: "គណនាសមាមាត្រ", desc: "គណនាសមាមាត្ររូបភាព" },
   font_preview: { name: "មើលពុម្ពអក្សរ", desc: "មើលពុម្ពអក្សរផ្សេងៗជាមុន" },
+  video_translator: { name: "បកប្រែវីដេអូ", desc: "បង្ហោះវីដេអូ បកប្រែអត្ថបទរងទៅខ្មែរ" },
 } as const;
 
 const toolsEn = {
