@@ -9,7 +9,7 @@ const toolsKm = {
   image_compress: { name: "បង្រួមរូបភាព", desc: "បង្រួមទំហំរូបភាពដោយរក្សាគុណភាព" },
   image_pdf: { name: "រូបភាព → PDF", desc: "បំប្លែងរូបភាពទៅជា PDF" },
   translator: { name: "បកប្រែ", desc: "បកប្រែអត្ថបទរវាងភាសាជាច្រើន" },
-  image_to_text: { name: "រូបភាព → អត្ថបទ", desc: "ស្កេនអត្ថបទពីរូបភាព" },
+  image_to_text: { name: "រូបភាព → អត្ថបទ", desc: "ស្កេនអត្ថបទពីរូបភាព OCR" },
   bg_remover: { name: "ដកផ្ទៃខាងក្រោយ", desc: "ដកផ្ទៃខាងក្រោយរូបភាព" },
   image_enhancer: { name: "កែលម្អរូបភាព", desc: "កែពន្លឺ កម្រិតពណ៌ និងភាពច្បាស់" },
   screen_recorder: { name: "ថតអេក្រង់", desc: "ថតអេក្រង់កុំព្យូទ័ររបស់អ្នក" },
