@@ -27,7 +27,7 @@ export type ToolId =
   | "morse_code" | "dice_roller" | "rock_paper" | "memory_game"
   | "tic_tac_toe" | "quote_gen" | "screen_recorder" | "habit_tracker"
   | "character_map" | "image_to_text" | "bg_remover" | "ai_math"
-  | "image_enhancer" | "quiz";
+  | "image_enhancer" | "quiz" | "meme_maker";
 
 export interface ToolMeta {
   id: ToolId;
