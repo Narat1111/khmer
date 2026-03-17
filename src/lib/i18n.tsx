@@ -71,6 +71,14 @@ const toolsKm = {
   ai_math: { name: "AI គណិតវិទ្យា", desc: "ដោះស្រាយកន្សោមគណិតវិទ្យា" },
   quiz: { name: "ប្រឡងសំណួរ", desc: "សាកល្បងចំណេះដឹងរបស់អ្នក" },
   meme_maker: { name: "បង្កើត Meme", desc: "បង្កើតរូបភាព Meme គួរឱ្យសើច" },
+  audio_recorder: { name: "ថតសំឡេង", desc: "ថតសំឡេងពីមីក្រូហ្វូន" },
+  flashcard_maker: { name: "បង្កើត Flashcard", desc: "រៀនដោយប្រើកាតរំលឹក" },
+  budget_planner: { name: "រៀបចំថវិកា", desc: "គ្រប់គ្រងចំណូល និងចំណាយ" },
+  pixel_art: { name: "Pixel Art", desc: "គូររូបភាព Pixel Art" },
+  chess_game: { name: "ហ្គេមអុក", desc: "លេងអុកអន្តរជាតិ" },
+  sudoku: { name: "Sudoku", desc: "ល្បែងផ្គុំលេខ Sudoku" },
+  game_2048: { name: "2048", desc: "ល្បែងផ្គុំលេខ 2048" },
+  pdf_merger: { name: "បញ្ចូល PDF", desc: "បញ្ចូល PDF ជាមួយគ្នា" },
 } as const;
 
 const toolsEn = {
