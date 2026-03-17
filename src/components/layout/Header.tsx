@@ -31,6 +31,12 @@ export function Header() {
     });
   };
 
+  const handleAppleSignIn = async () => {
+    await lovable.auth.signInWithOAuth("apple", {
+      redirect_uri: window.location.origin,
+    });
+  };
+
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     setUser(null);
