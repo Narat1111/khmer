@@ -37,7 +37,7 @@ const ToolPage = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <ToolLayout title={meta.name} description={meta.desc} icon={tool.icon}>
+      <ToolLayout title={meta.name} description={meta.desc} icon={tool.icon} toolId={tool.id}>
         <Suspense fallback={<div className="py-10 text-center text-muted-foreground">{t.loading}</div>}>
           <Component />
         </Suspense>
