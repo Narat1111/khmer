@@ -136,7 +136,6 @@ const toolsEn = {
   memory_game: { name: "Memory Game", desc: "Match pairs of cards" },
   tic_tac_toe: { name: "Tic Tac Toe", desc: "Classic XO board game" },
   quote_gen: { name: "Quote Generator", desc: "Random inspirational quotes" },
-  screen_recorder: { name: "Screen Recorder", desc: "Record your computer screen" },
   habit_tracker: { name: "Habit Tracker", desc: "Track your daily habits" },
   character_map: { name: "Character Map", desc: "Copy special symbols & characters" },
   ai_math: { name: "AI Math Solver", desc: "Solve math expressions step by step" },
