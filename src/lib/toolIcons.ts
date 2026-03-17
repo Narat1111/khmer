@@ -19,6 +19,21 @@ import toolWifi from "@/assets/icons/tool-wifi.png";
 import toolIpLocation from "@/assets/icons/tool-ip-location.png";
 import toolCodeEditor from "@/assets/icons/tool-code-editor.png";
 import toolImagePdf from "@/assets/icons/tool-image-pdf.png";
+import toolCalculator from "@/assets/icons/tool-calculator.png";
+import toolBmi from "@/assets/icons/tool-bmi.png";
+import toolAge from "@/assets/icons/tool-age.png";
+import toolTyping from "@/assets/icons/tool-typing.png";
+import toolSnake from "@/assets/icons/tool-snake.png";
+import toolLuckyWheel from "@/assets/icons/tool-lucky-wheel.png";
+import toolTodo from "@/assets/icons/tool-todo.png";
+import toolNotes from "@/assets/icons/tool-notes.png";
+import toolPomodoro from "@/assets/icons/tool-pomodoro.png";
+import toolJson from "@/assets/icons/tool-json.png";
+import toolGradient from "@/assets/icons/tool-gradient.png";
+import toolCoin from "@/assets/icons/tool-coin.png";
+import toolTip from "@/assets/icons/tool-tip.png";
+import toolLoan from "@/assets/icons/tool-loan.png";
+import toolTranslator from "@/assets/icons/tool-translator.png";
 
 import { ToolId } from "@/lib/tools";
 
@@ -44,4 +59,19 @@ export const toolIcons: Record<ToolId, string> = {
   ip_location: toolIpLocation,
   code_editor: toolCodeEditor,
   image_pdf: toolImagePdf,
+  calculator: toolCalculator,
+  bmi_calculator: toolBmi,
+  age_calculator: toolAge,
+  typing_test: toolTyping,
+  snake_game: toolSnake,
+  lucky_wheel: toolLuckyWheel,
+  todo_list: toolTodo,
+  notes: toolNotes,
+  pomodoro: toolPomodoro,
+  json_formatter: toolJson,
+  gradient_generator: toolGradient,
+  flip_coin: toolCoin,
+  tip_calculator: toolTip,
+  loan_calculator: toolLoan,
+  translator: toolTranslator,
 };

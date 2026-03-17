@@ -27,6 +27,21 @@ const toolComponents: Record<ToolId, React.LazyExoticComponent<React.FC>> = {
   ip_location: lazy(() => import("@/components/tools/IPLocation")),
   code_editor: lazy(() => import("@/components/tools/CodeEditor")),
   image_pdf: lazy(() => import("@/components/tools/ImageToPdf")),
+  calculator: lazy(() => import("@/components/tools/Calculator")),
+  bmi_calculator: lazy(() => import("@/components/tools/BMICalculator")),
+  age_calculator: lazy(() => import("@/components/tools/AgeCalculator")),
+  typing_test: lazy(() => import("@/components/tools/TypingTest")),
+  snake_game: lazy(() => import("@/components/tools/SnakeGame")),
+  lucky_wheel: lazy(() => import("@/components/tools/LuckyWheel")),
+  todo_list: lazy(() => import("@/components/tools/TodoList")),
+  notes: lazy(() => import("@/components/tools/Notes")),
+  pomodoro: lazy(() => import("@/components/tools/Pomodoro")),
+  json_formatter: lazy(() => import("@/components/tools/JSONFormatter")),
+  gradient_generator: lazy(() => import("@/components/tools/GradientGenerator")),
+  flip_coin: lazy(() => import("@/components/tools/CoinFlip")),
+  tip_calculator: lazy(() => import("@/components/tools/TipCalculator")),
+  loan_calculator: lazy(() => import("@/components/tools/LoanCalculator")),
+  translator: lazy(() => import("@/components/tools/Translator")),
 };
 
 const ToolPage = () => {

@@ -19,7 +19,7 @@ const Index = () => {
     });
   }, [query, t]);
 
-  const categories = ["media", "productivity", "utilities"] as const;
+  const categories = ["media", "productivity", "games", "finance", "utilities"] as const;
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if ((e.metaKey || e.ctrlKey) && e.key === "k") {
@@ -59,6 +59,14 @@ const Index = () => {
           >
             {t.subtitle}
           </motion.p>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+            className="mt-2 inline-block rounded-full bg-primary/10 px-3 py-1 text-xs font-bold text-primary"
+          >
+            🛠️ {tools.length} Free Tools
+          </motion.div>
         </motion.div>
 
         {/* Search */}
@@ -105,8 +113,11 @@ const Index = () => {
                 <h2 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">
                   {t.categories[cat]}
                 </h2>
+                <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-bold text-muted-foreground">
+                  {catTools.length}
+                </span>
               </div>
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
                 {catTools.map((tool, i) => (
                   <ToolCard key={tool.id} tool={tool} index={i} />
                 ))}
@@ -125,6 +136,17 @@ const Index = () => {
           </motion.p>
         )}
       </main>
+
+      {/* Footer */}
+      <footer className="border-t bg-card/50 py-6">
+        <div className="container text-center">
+          <p className="text-sm font-bold">DaraTool</p>
+          <p className="mt-1 text-xs text-muted-foreground">© 2026 DaraTool — Version 0.2</p>
+          <p className="mt-1 text-xs text-muted-foreground">
+            {tools.length} Free Tools • Built with ❤️
+          </p>
+        </div>
+      </footer>
     </div>
   );
 };
