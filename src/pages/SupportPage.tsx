@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { Header } from "@/components/layout/Header";
 import { useI18n } from "@/lib/i18n";
 import { motion } from "framer-motion";
-import { Heart, Copy, Check, ExternalLink, Smartphone, Loader2, RefreshCw, CheckCircle2, Info } from "lucide-react";
+import { Heart, Copy, Check, Smartphone, Loader2, RefreshCw, CheckCircle2, Info, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -10,8 +10,7 @@ import daraAvatar from "@/assets/dara-avatar.png";
 import bakongIcon from "@/assets/icons/bakong-icon.png";
 
 const BAKONG_ACCOUNT = "dara_mao@bkrt";
-const MERCHANT_NAME = "Daratool Support";
-const KHQR_DATA = "00020101021229170013dara_mao@bkrt520459995802KH5915Daratool_support6010Phnom Penh991700131771164836867630440B5";
+const MERCHANT_NAME = "Daratool_support";
 
 const SupportPage = () => {
   const { lang } = useI18n();
@@ -20,6 +19,9 @@ const SupportPage = () => {
   const [paymentStatus, setPaymentStatus] = useState<string | null>(null);
   const [checking, setChecking] = useState(false);
   const [md5Hash, setMd5Hash] = useState<string | null>(null);
+  const [qrData, setQrData] = useState<string | null>(null);
+  const [deeplink, setDeeplink] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   const amounts = [
     { usd: 1, khr: 4100, label: "☕" },
@@ -30,9 +32,61 @@ const SupportPage = () => {
     { usd: 50, khr: 205000, label: "👑" },
   ];
 
-  const generateQrUrl = () => {
-    return `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(KHQR_DATA)}&size=300x300&color=1a1a2e&bgcolor=ffffff`;
-  };
+  // Generate QR via edge function
+  const generateQR = useCallback(async (amount?: number) => {
+    setLoading(true);
+    setPaymentStatus(null);
+    try {
+      const { data, error } = await supabase.functions.invoke("bakong-khqr", {
+        body: {
+          action: "create_qr",
+          bank_account: BAKONG_ACCOUNT,
+          merchant_name: MERCHANT_NAME,
+          merchant_city: "Phnom Penh",
+          amount: amount || undefined,
+          currency: "USD",
+          store_label: "Daratoolsupport",
+          phone_number: "855974640130",
+          bill_number: `DT${Date.now().toString().slice(-8)}`,
+          terminal_label: "DaraTool",
+          static: !amount, // static if no amount, dynamic if amount selected
+        },
+      });
+      if (error) throw error;
+      if (data?.qr) {
+        setQrData(data.qr);
+        setMd5Hash(data.md5);
+
+        // Generate deeplink
+        const { data: dlData } = await supabase.functions.invoke("bakong-khqr", {
+          body: {
+            action: "generate_deeplink",
+            qr_data: data.qr,
+            callback: "https://daratool.lovable.app/support",
+            app_icon_url: "https://daratool.lovable.app/favicon.ico",
+            app_name: "DaraTool",
+          },
+        });
+        if (dlData?.deeplink) setDeeplink(dlData.deeplink);
+      }
+    } catch (err) {
+      console.error("QR generation error:", err);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  // Initial QR generation (static, no amount)
+  useEffect(() => {
+    generateQR();
+  }, [generateQR]);
+
+  // Regenerate when amount changes
+  useEffect(() => {
+    if (selectedAmount !== null) {
+      generateQR(selectedAmount);
+    }
+  }, [selectedAmount, generateQR]);
 
   const checkPayment = useCallback(async () => {
     if (!md5Hash) return;
@@ -42,10 +96,8 @@ const SupportPage = () => {
         body: { action: "check_payment", md5: md5Hash },
       });
       if (error) throw error;
-
-      const status = data?.responseMessage || data?.status || "UNPAID";
+      const status = data?.responseMessage || "UNPAID";
       setPaymentStatus(status);
-
       if (status === "PAID" || status === "SUCCESS") {
         toast.success(lang === "km" ? "ការទូទាត់ជោគជ័យ! សូមអរគុណ! 🙏❤️" : "Payment successful! Thank you! 🙏❤️");
       }
@@ -56,20 +108,7 @@ const SupportPage = () => {
     }
   }, [md5Hash, lang]);
 
-  useEffect(() => {
-    const generateMd5 = async () => {
-      try {
-        const { data } = await supabase.functions.invoke("bakong-khqr", {
-          body: { action: "generate_md5", qr_data: KHQR_DATA },
-        });
-        if (data?.md5) setMd5Hash(data.md5);
-      } catch (err) {
-        console.error("MD5 generation error:", err);
-      }
-    };
-    generateMd5();
-  }, []);
-
+  // Auto-poll payment status
   useEffect(() => {
     if (!md5Hash || paymentStatus === "PAID" || paymentStatus === "SUCCESS") return;
     const interval = setInterval(checkPayment, 8000);
@@ -84,10 +123,17 @@ const SupportPage = () => {
   };
 
   const openBakong = () => {
-    window.open("https://bakong.nbc.gov.kh/", "_blank");
+    if (deeplink) {
+      window.open(deeplink, "_blank");
+    } else {
+      window.open("https://bakong.nbc.gov.kh/", "_blank");
+    }
   };
 
   const isPaid = paymentStatus === "PAID" || paymentStatus === "SUCCESS";
+  const qrImageUrl = qrData
+    ? `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(qrData)}&size=300x300&color=1a1a2e&bgcolor=ffffff`
+    : null;
 
   return (
     <div className="min-h-screen bg-background">
@@ -159,7 +205,17 @@ const SupportPage = () => {
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ type: "spring", bounce: 0.4, delay: 0.3 }}
               >
-                <img src={generateQrUrl()} alt="Bakong KHQR" className="w-48 h-48" />
+                {loading ? (
+                  <div className="w-48 h-48 flex items-center justify-center">
+                    <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                  </div>
+                ) : qrImageUrl ? (
+                  <img src={qrImageUrl} alt="Bakong KHQR" className="w-48 h-48" />
+                ) : (
+                  <div className="w-48 h-48 flex items-center justify-center text-muted-foreground text-xs">
+                    QR unavailable
+                  </div>
+                )}
               </motion.div>
             </div>
 
@@ -174,11 +230,7 @@ const SupportPage = () => {
 
             {/* Payment Status */}
             {md5Hash && !isPaid && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="flex items-center justify-center gap-2"
-              >
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center justify-center gap-2">
                 <div className="h-2 w-2 rounded-full bg-yellow-500 animate-pulse" />
                 <span className="text-xs text-muted-foreground">
                   {lang === "km" ? "កំពុងរង់ចាំការទូទាត់..." : "Waiting for payment..."}
@@ -239,6 +291,7 @@ const SupportPage = () => {
             <Button onClick={openBakong} className="w-full gap-2" size="lg">
               <img src={bakongIcon} alt="" className="h-5 w-5 object-contain" />
               {lang === "km" ? "បើក Bakong App" : "Open Bakong App"}
+              {deeplink && <ExternalLink className="h-3 w-3" />}
             </Button>
           </motion.div>
 
@@ -290,10 +343,7 @@ const SupportPage = () => {
             transition={{ delay: 0.5 }}
             className="rounded-xl border bg-card p-4 text-center space-y-2"
           >
-            <motion.div
-              animate={{ scale: [1, 1.2, 1] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
-            >
+            <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 1.5, repeat: Infinity }}>
               <Heart className="h-6 w-6 text-destructive mx-auto" />
             </motion.div>
             <h3 className="font-bold">{lang === "km" ? "សូមអរគុណ! 🙏" : "Thank You! 🙏"}</h3>
