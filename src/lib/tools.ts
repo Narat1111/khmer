@@ -78,6 +78,7 @@ export const tools: ToolMeta[] = [
   { id: "draw_board", icon: PenTool, category: "design" },
   { id: "character_map", icon: LayoutGrid, category: "design" },
   { id: "barcode_gen", icon: Barcode, category: "design" },
+  { id: "meme_maker", icon: Laugh, category: "design" },
   // Games
   { id: "snake_game", icon: Gamepad2, category: "games" },
   { id: "lucky_wheel", icon: CircleDot, category: "games" },
