@@ -25,11 +25,6 @@ export function Header() {
     return () => subscription.unsubscribe();
   }, []);
 
-  const handleGoogleSignIn = async () => {
-    await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin,
-    });
-  };
 
   const handleAppleSignIn = async () => {
     await lovable.auth.signInWithOAuth("apple", {
