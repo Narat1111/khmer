@@ -7,7 +7,7 @@ import {
   Barcode, Percent, CalendarDays, Hourglass, SwatchBook, BoxSelect, Diff,
   Link2, BinaryIcon, LetterText, Thermometer, Radio, Dices, Swords, Brain,
   Grid3X3, Quote, MonitorPlay, CheckSquare, LayoutGrid, ScanText, ImageMinus,
-  FunctionSquare, SlidersHorizontal, HelpCircle,
+  FunctionSquare, SlidersHorizontal, HelpCircle, Laugh,
 } from "lucide-react";
 
 export type ToolId =
