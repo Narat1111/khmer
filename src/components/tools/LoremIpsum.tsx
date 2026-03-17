@@ -2,7 +2,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { motion } from "framer-motion";
-import { Copy, Check } from "lucide-react";
+import { Copy, Check, Download } from "lucide-react";
+import { toast } from "sonner";
 
 const words = "lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur excepteur sint occaecat cupidatat non proident sunt in culpa qui officia deserunt mollit anim id est laborum".split(" ");
 
@@ -20,14 +21,33 @@ const LoremIpsum: React.FC = () => {
     setText(paragraphs.map(p => p.charAt(0).toUpperCase() + p.slice(1)).join("\n\n"));
   };
 
-  const copy = () => { navigator.clipboard.writeText(text); setCopied(true); setTimeout(() => setCopied(false), 1500); };
+  const copy = () => {
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+    toast.success("Copied to clipboard!");
+    setTimeout(() => setCopied(false), 1500);
+  };
+
+  const download = () => {
+    const blob = new Blob([text], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = "lorem-ipsum.txt";
+    a.click(); URL.revokeObjectURL(url);
+    toast.success("File saved!");
+  };
 
   return (
     <div className="space-y-4">
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex gap-2">
         <Input type="number" value={count} onChange={(e) => setCount(e.target.value)} placeholder="Paragraphs" className="w-32" />
         <Button onClick={generate}>Generate</Button>
-        {text && <Button variant="outline" onClick={copy}>{copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}</Button>}
+        {text && (
+          <>
+            <Button variant="outline" onClick={copy}>{copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}</Button>
+            <Button variant="outline" onClick={download}><Download className="h-4 w-4" /></Button>
+          </>
+        )}
       </motion.div>
       {text && (
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="rounded-xl border bg-card p-4 text-sm leading-relaxed whitespace-pre-line">

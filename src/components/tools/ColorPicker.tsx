@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useI18n } from "@/lib/i18n";
-import { Copy, Check } from "lucide-react";
+import { Copy, Check, Download } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 const ColorPicker: React.FC = () => {
   const { t } = useI18n();
@@ -35,7 +37,28 @@ const ColorPicker: React.FC = () => {
   const copyValue = (val: string) => {
     navigator.clipboard.writeText(val);
     setCopied(val);
+    toast.success("Copied: " + val);
     setTimeout(() => setCopied(""), 2000);
+  };
+
+  const downloadSwatch = () => {
+    const canvas = document.createElement("canvas");
+    canvas.width = 400; canvas.height = 400;
+    const ctx = canvas.getContext("2d")!;
+    ctx.fillStyle = color;
+    ctx.fillRect(0, 0, 400, 400);
+    ctx.fillStyle = "#fff";
+    ctx.font = "bold 24px sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText(color, 200, 360);
+    canvas.toBlob((blob) => {
+      if (!blob) return;
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url; a.download = `color-${color.slice(1)}.png`;
+      a.click(); URL.revokeObjectURL(url);
+      toast.success("Color swatch saved!");
+    });
   };
 
   const formats = [
@@ -62,6 +85,11 @@ const ColorPicker: React.FC = () => {
           </div>
         ))}
       </div>
+
+      <Button onClick={downloadSwatch} variant="outline" className="w-full gap-2">
+        <Download className="h-4 w-4" />
+        Save Color Swatch
+      </Button>
     </div>
   );
 };
