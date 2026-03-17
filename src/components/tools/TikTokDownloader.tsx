@@ -19,6 +19,12 @@ const TikTokDownloader: React.FC = () => {
     setError("");
     setData(null);
 
+    const fixUrl = (u: string | undefined | null, base: string) => {
+      if (!u) return null;
+      if (u.startsWith("http")) return u;
+      return `${base}${u.startsWith("/") ? "" : "/"}${u}`;
+    };
+
     const apis = [
       async () => {
         const res = await fetch(`https://www.tikwm.com/api/?url=${encodeURIComponent(url)}&hd=1`);
@@ -26,9 +32,9 @@ const TikTokDownloader: React.FC = () => {
         if (json.code === 0 && json.data) {
           return {
             title: json.data.title || "TikTok Video",
-            video: `https://www.tikwm.com${json.data.play}`,
-            videoHD: json.data.hdplay ? `https://www.tikwm.com${json.data.hdplay}` : null,
-            music: json.data.music ? `https://www.tikwm.com${json.data.music}` : null,
+            video: fixUrl(json.data.play, "https://www.tikwm.com"),
+            videoHD: fixUrl(json.data.hdplay, "https://www.tikwm.com"),
+            music: fixUrl(json.data.music, "https://www.tikwm.com"),
             cover: json.data.cover,
             author: json.data.author?.nickname || json.data.author?.unique_id,
           };
@@ -41,9 +47,9 @@ const TikTokDownloader: React.FC = () => {
         if (json.code === 0 && json.data) {
           return {
             title: json.data.title || "TikTok Video",
-            video: json.data.play,
-            videoHD: json.data.hdplay || null,
-            music: json.data.music || null,
+            video: fixUrl(json.data.play, "https://www.tikwm.com"),
+            videoHD: fixUrl(json.data.hdplay, "https://www.tikwm.com"),
+            music: fixUrl(json.data.music, "https://www.tikwm.com"),
             cover: json.data.cover,
             author: json.data.author?.nickname,
           };
