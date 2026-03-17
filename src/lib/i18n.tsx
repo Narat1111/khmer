@@ -91,7 +91,7 @@ const dict = {
   },
 } as const;
 
-type Dict = typeof dict.km;
+type Dict = (typeof dict)[Lang];
 
 interface I18nContextType {
   lang: Lang;
