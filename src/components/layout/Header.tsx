@@ -3,7 +3,7 @@ import { Globe, Sun, Moon } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/hooks/use-theme";
-import mascot from "@/assets/mascot.png";
+import daraAvatar from "@/assets/dara-avatar.png";
 
 export function Header() {
   const { lang, setLang, t } = useI18n();
@@ -14,7 +14,7 @@ export function Header() {
       <div className="container flex h-14 items-center justify-between sm:h-16">
         <Link to="/" className="flex items-center gap-2">
           <motion.img
-            src={mascot}
+            src={daraAvatar}
             alt="DaraTool"
             className="h-9 w-9 rounded-full object-cover ring-2 ring-primary/30"
             whileHover={{ rotate: 10, scale: 1.1 }}
