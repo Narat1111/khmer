@@ -66,6 +66,14 @@ import toolEnhance from "@/assets/icons/tool-enhance.png";
 import toolQuiz from "@/assets/icons/tool-quiz.png";
 import toolLorem from "@/assets/icons/tool-lorem.png";
 import toolMeme from "@/assets/icons/tool-meme.png";
+import toolAudioRecorder from "@/assets/icons/tool-audio-recorder.png";
+import toolFlashcard from "@/assets/icons/tool-flashcard.png";
+import toolBudget from "@/assets/icons/tool-budget.png";
+import toolPixelArt from "@/assets/icons/tool-pixel-art.png";
+import toolChess from "@/assets/icons/tool-chess.png";
+import toolSudoku from "@/assets/icons/tool-sudoku.png";
+import tool2048 from "@/assets/icons/tool-2048.png";
+import toolPdfMerge from "@/assets/icons/tool-pdf-merge.png";
 
 import { ToolId } from "@/lib/tools";
 
@@ -106,7 +114,6 @@ export const toolIcons: Partial<Record<ToolId, string>> = {
   tip_calculator: toolTip,
   loan_calculator: toolLoan,
   translator: toolTranslator,
-  // New tools
   regex_tester: toolRegex,
   markdown_preview: toolMarkdown,
   emoji_picker: toolEmoji,
@@ -138,4 +145,12 @@ export const toolIcons: Partial<Record<ToolId, string>> = {
   quiz: toolQuiz,
   lorem_ipsum: toolLorem,
   meme_maker: toolMeme,
+  audio_recorder: toolAudioRecorder,
+  flashcard_maker: toolFlashcard,
+  budget_planner: toolBudget,
+  pixel_art: toolPixelArt,
+  chess_game: toolChess,
+  sudoku: toolSudoku,
+  game_2048: tool2048,
+  pdf_merger: toolPdfMerge,
 };
