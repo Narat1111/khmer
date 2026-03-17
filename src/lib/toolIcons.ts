@@ -37,7 +37,8 @@ import toolTranslator from "@/assets/icons/tool-translator.png";
 
 import { ToolId } from "@/lib/tools";
 
-export const toolIcons: Record<ToolId, string> = {
+// Only tools with custom icons - rest fallback to lucide
+export const toolIcons: Partial<Record<ToolId, string>> = {
   tiktok: toolTiktok,
   ai_chat: toolAiChat,
   voice: toolVoice,

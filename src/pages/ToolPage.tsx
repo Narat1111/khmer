@@ -42,6 +42,37 @@ const toolComponents: Record<ToolId, React.LazyExoticComponent<React.FC>> = {
   tip_calculator: lazy(() => import("@/components/tools/TipCalculator")),
   loan_calculator: lazy(() => import("@/components/tools/LoanCalculator")),
   translator: lazy(() => import("@/components/tools/Translator")),
+  // New tools
+  markdown_preview: lazy(() => import("@/components/tools/MarkdownPreview")),
+  regex_tester: lazy(() => import("@/components/tools/RegexTester")),
+  lorem_ipsum: lazy(() => import("@/components/tools/LoremIpsum")),
+  emoji_picker: lazy(() => import("@/components/tools/EmojiPicker")),
+  draw_board: lazy(() => import("@/components/tools/DrawBoard")),
+  barcode_gen: lazy(() => import("@/components/tools/BarcodeGenerator")),
+  percentage_calc: lazy(() => import("@/components/tools/PercentageCalc")),
+  date_diff: lazy(() => import("@/components/tools/DateDiff")),
+  countdown_timer: lazy(() => import("@/components/tools/CountdownTimer")),
+  color_palette: lazy(() => import("@/components/tools/ColorPaletteGen")),
+  css_shadow: lazy(() => import("@/components/tools/CSSShadowGen")),
+  text_diff: lazy(() => import("@/components/tools/TextDiff")),
+  url_encoder: lazy(() => import("@/components/tools/URLEncoderDecoder")),
+  binary_converter: lazy(() => import("@/components/tools/BinaryConverter")),
+  roman_numeral: lazy(() => import("@/components/tools/RomanNumeral")),
+  temperature: lazy(() => import("@/components/tools/TemperatureConverter")),
+  morse_code: lazy(() => import("@/components/tools/MorseCode")),
+  dice_roller: lazy(() => import("@/components/tools/DiceRoller")),
+  rock_paper: lazy(() => import("@/components/tools/RockPaperScissors")),
+  memory_game: lazy(() => import("@/components/tools/MemoryGame")),
+  tic_tac_toe: lazy(() => import("@/components/tools/TicTacToe")),
+  quote_gen: lazy(() => import("@/components/tools/QuoteGenerator")),
+  screen_recorder: lazy(() => import("@/components/tools/ScreenRecorder")),
+  habit_tracker: lazy(() => import("@/components/tools/HabitTracker")),
+  character_map: lazy(() => import("@/components/tools/CharacterMap")),
+  image_to_text: lazy(() => import("@/components/tools/ImageToText")),
+  bg_remover: lazy(() => import("@/components/tools/BGRemover")),
+  ai_math: lazy(() => import("@/components/tools/AIMath")),
+  image_enhancer: lazy(() => import("@/components/tools/ImageEnhancer")),
+  quiz: lazy(() => import("@/components/tools/Quiz")),
 };
 
 const ToolPage = () => {
@@ -57,7 +88,7 @@ const ToolPage = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <ToolLayout title={meta.name} description={meta.desc} icon={tool.icon} toolId={tool.id}>
+      <ToolLayout title={meta?.name || tool.id} description={meta?.desc || ""} icon={tool.icon} toolId={tool.id}>
         <Suspense fallback={<div className="py-10 text-center text-muted-foreground">{t.loading}</div>}>
           <Component />
         </Suspense>
