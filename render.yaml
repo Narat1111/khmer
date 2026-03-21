@@ -1,11 +1,9 @@
 services:
   - type: web
     name: hinarat
-    env: static
+    env: node
     buildCommand: npm install && npm run build
-    staticPublishPath: dist
-    pullRequestPreviewsEnabled: false
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html
+    startCommand: node server.js
+    envVars:
+      - key: NODE_VERSION
+        value: 22.22.0
