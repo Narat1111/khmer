@@ -47,9 +47,7 @@ const SupportPage = () => {
           currency: "USD",
           store_label: MERCHANT_NAME,
           phone_number: "855975867586",
-          bill_number: `TRX${Date.now().toString().slice(-8)}`,
-          terminal_label: "Cashier-01",
-          static: !amount,
+          static: true,
         },
       });
       if (error) throw error;

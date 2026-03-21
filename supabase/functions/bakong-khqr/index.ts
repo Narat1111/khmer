@@ -174,7 +174,7 @@ serve(async (req) => {
         store_label: body.store_label || "NARAT CHHEAK",
         phone_number: body.phone_number || "855975867586",
         bill_number: body.bill_number,
-        terminal_label: body.terminal_label || "Cashier-01",
+        terminal_label: body.terminal_label,
         static: body.static ?? true,
       });
       const md5 = await computeMd5(qrData);
