@@ -15,7 +15,6 @@ const MERCHANT_NAME = "NARAT CHHEAK";
 const SupportPage = () => {
   const { lang } = useI18n();
   const [copied, setCopied] = useState(false);
-  const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
   const [paymentStatus, setPaymentStatus] = useState<string | null>(null);
   const [checking, setChecking] = useState(false);
   const [md5Hash, setMd5Hash] = useState<string | null>(null);
@@ -23,14 +22,7 @@ const SupportPage = () => {
   const [deeplink, setDeeplink] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const amounts = [
-    { usd: 1, khr: 4100, label: "☕" },
-    { usd: 2, khr: 8200, label: "🍜" },
-    { usd: 5, khr: 20500, label: "💪" },
-    { usd: 10, khr: 41000, label: "🌟" },
-    { usd: 20, khr: 82000, label: "🚀" },
-    { usd: 50, khr: 205000, label: "👑" },
-  ];
+
 
   // Generate QR via edge function
   const generateQR = useCallback(async (amount?: number) => {
@@ -79,12 +71,7 @@ const SupportPage = () => {
     generateQR();
   }, [generateQR]);
 
-  // Regenerate when amount changes
-  useEffect(() => {
-    if (selectedAmount !== null) {
-      generateQR(selectedAmount);
-    }
-  }, [selectedAmount, generateQR]);
+
 
   const checkPayment = useCallback(async () => {
     if (!md5Hash) return;
