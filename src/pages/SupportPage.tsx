@@ -256,34 +256,7 @@ const SupportPage = () => {
               </div>
             </div>
 
-            {/* Amount Selection */}
-            <div className="space-y-2">
-              <p className="text-sm font-medium text-center">
-                {lang === "km" ? "ជ្រើសរើសចំនួន" : "Choose amount"}
-              </p>
-              <div className="grid grid-cols-3 gap-2">
-                {amounts.map((amt, i) => (
-                  <motion.button
-                    key={amt.usd}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.1 * i }}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => setSelectedAmount(selectedAmount === amt.usd ? null : amt.usd)}
-                    className={`rounded-xl border-2 p-3 text-center transition-all ${
-                      selectedAmount === amt.usd
-                        ? "border-primary bg-primary/10 shadow-md"
-                        : "border-muted hover:border-primary/50"
-                    }`}
-                  >
-                    <span className="text-xl">{amt.label}</span>
-                    <p className="text-sm font-bold font-english">${amt.usd}</p>
-                    <p className="text-[10px] text-muted-foreground font-english">{amt.khr.toLocaleString()}៛</p>
-                  </motion.button>
-                ))}
-              </div>
-            </div>
+
 
             {/* Open Bakong Button */}
             <Button onClick={openBakong} className="w-full gap-2" size="lg">
