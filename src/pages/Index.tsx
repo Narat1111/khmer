@@ -5,7 +5,7 @@ import { tools } from "@/lib/tools";
 import { ToolCard } from "@/components/ToolCard";
 import { Header } from "@/components/layout/Header";
 import { motion } from "framer-motion";
-import daraAvatar from "@/assets/dara-avatar.png";
+import naratAvatar from "@/assets/narat-avatar.png";
 
 const Index = () => {
   const { t } = useI18n();
@@ -95,40 +95,33 @@ const Index = () => {
             <div className="col-span-2 sm:col-span-1">
               <div className="flex items-center gap-3 mb-3">
                 <motion.img
-                  src={daraAvatar}
-                  alt="DaraTool"
+                  src={naratAvatar}
+                  alt="Hinarat"
                   className="h-10 w-10 rounded-full object-cover ring-2 ring-primary/30"
                   whileHover={{ rotate: 10, scale: 1.15 }}
                 />
-                <span className="text-sm font-bold">DaraTool</span>
+                <span className="text-sm font-bold">Hinarat</span>
               </div>
               <p className="text-xs text-muted-foreground leading-relaxed">
                 Your trusted platform for free online tools. Fast, reliable, and easy to use.
               </p>
-              {/* Social icons with animation */}
+              {/* Telegram only */}
               <div className="mt-4 flex gap-2">
-                {[
-                  { href: "https://t.me/DaraStore123", label: "Telegram", icon: <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg> },
-                  { href: "https://www.tiktok.com/@kirajaksloy", label: "TikTok", icon: <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 0 0-.79-.05A6.34 6.34 0 0 0 3.15 15a6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.72a8.24 8.24 0 0 0 4.76 1.5v-3.4a4.85 4.85 0 0 1-1-.13z"/></svg> },
-                  { href: "https://www.facebook.com/share/18V7gK6LpS/?mibextid=wwXIfr", label: "Facebook", icon: <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg> },
-                  { href: "https://t.me/nyxvibecode", label: "Channel", icon: <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg> },
-                ].map((social, i) => (
-                  <motion.a
-                    key={social.label}
-                    href={social.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex h-9 w-9 items-center justify-center rounded-lg bg-muted transition-colors hover:bg-primary hover:text-primary-foreground"
-                    whileHover={{ scale: 1.15, rotate: 5 }}
-                    whileTap={{ scale: 0.9 }}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 * i }}
-                    title={social.label}
-                  >
-                    {social.icon}
-                  </motion.a>
-                ))}
+                <motion.a
+                  href="https://t.me/Naratkh168"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex h-9 w-9 items-center justify-center rounded-lg bg-muted transition-colors hover:bg-primary hover:text-primary-foreground"
+                  whileHover={{ scale: 1.15, rotate: 5 }}
+                  whileTap={{ scale: 0.9 }}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  title="Telegram"
+                >
+                  <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current">
+                    <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                  </svg>
+                </motion.a>
               </div>
             </div>
 
@@ -152,12 +145,18 @@ const Index = () => {
               </ul>
             </div>
 
-            {/* Support */}
+            {/* Contact */}
             <div>
-              <h4 className="mb-3 text-xs font-bold uppercase tracking-wider text-muted-foreground">Support</h4>
+              <h4 className="mb-3 text-xs font-bold uppercase tracking-wider text-muted-foreground">Contact</h4>
               <ul className="space-y-2 text-xs">
-                <li><a href="https://t.me/DaraStore123" target="_blank" rel="noopener noreferrer" className="text-muted-foreground transition-colors hover:text-foreground">Contact Us</a></li>
-                <li><a href="https://t.me/nyxvibecode" target="_blank" rel="noopener noreferrer" className="text-muted-foreground transition-colors hover:text-foreground">Channel</a></li>
+                <li>
+                  <a href="https://t.me/Naratkh168" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-muted-foreground transition-colors hover:text-foreground">
+                    <svg viewBox="0 0 24 24" className="h-3.5 w-3.5 fill-current text-primary">
+                      <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                    </svg>
+                    Telegram: @Naratkh168
+                  </a>
+                </li>
                 <li><span className="text-muted-foreground">FAQ</span></li>
                 <li><span className="text-muted-foreground">Terms of Service</span></li>
                 <li><span className="text-muted-foreground">Privacy Policy</span></li>
@@ -167,7 +166,7 @@ const Index = () => {
 
           {/* Bottom */}
           <div className="mt-8 border-t pt-6 text-center">
-            <p className="text-xs text-muted-foreground">© 2026 DaraTool • {tools.length} Free Tools</p>
+            <p className="text-xs text-muted-foreground">© 2026 Hinarat • {tools.length} Free Tools</p>
           </div>
         </div>
       </footer>

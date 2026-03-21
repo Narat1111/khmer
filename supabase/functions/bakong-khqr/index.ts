@@ -153,7 +153,7 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    const BAKONG_TOKEN = Deno.env.get("BAKONG_TOKEN");
+    const BAKONG_TOKEN = Deno.env.get("BAKONG_TOKEN") || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoiZGRmZmY3NmIyZjgzNDNiMyJ9LCJpYXQiOjE3NzIwMjU0MjQsImV4cCI6MTc3OTgwMTQyNH0.TZtJqGnMbDgacpub2eMlikdUf33a1QkjhMh361Frn-U";
     if (!BAKONG_TOKEN) {
       return new Response(JSON.stringify({ error: "BAKONG_TOKEN not configured" }), {
         status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -166,15 +166,15 @@ serve(async (req) => {
     // ---- CREATE QR ----
     if (action === "create_qr") {
       const qrData = createKHQR({
-        bank_account: body.bank_account || "dara_mao@bkrt",
-        merchant_name: body.merchant_name || "Daratool_support",
+        bank_account: body.bank_account || "chheak_narat@bkrt",
+        merchant_name: body.merchant_name || "NARAT CHHEAK",
         merchant_city: body.merchant_city || "Phnom Penh",
         amount: body.amount,
         currency: body.currency || "USD",
-        store_label: body.store_label,
-        phone_number: body.phone_number,
+        store_label: body.store_label || "NARAT CHHEAK",
+        phone_number: body.phone_number || "855975867586",
         bill_number: body.bill_number,
-        terminal_label: body.terminal_label,
+        terminal_label: body.terminal_label || "Cashier-01",
         static: body.static ?? true,
       });
       const md5 = await computeMd5(qrData);

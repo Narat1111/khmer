@@ -214,7 +214,7 @@ const toolsEn = {
 
 const dict = {
   km: {
-    title: "DaraTool",
+    title: "Hinarat",
     subtitle: "ឧបករណ៍អនឡាញឥតគិតថ្លៃសម្រាប់អ្នកគ្រប់គ្នា",
     search: "ស្វែងរកឧបករណ៍...",
     back: "ត្រឡប់ក្រោយ",
@@ -245,7 +245,7 @@ const dict = {
     tools: toolsKm,
   },
   en: {
-    title: "DaraTool",
+    title: "Hinarat",
     subtitle: "Free online utility tools for everyone",
     search: "Search tools...",
     back: "Back",

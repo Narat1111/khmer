@@ -6,11 +6,11 @@ import { Heart, Copy, Check, Smartphone, Loader2, RefreshCw, CheckCircle2, Info,
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import daraAvatar from "@/assets/dara-avatar.png";
+import naratAvatar from "@/assets/narat-avatar.png";
 import bakongIcon from "@/assets/icons/bakong-icon.png";
 
-const BAKONG_ACCOUNT = "dara_mao@bkrt";
-const MERCHANT_NAME = "Daratool_support";
+const BAKONG_ACCOUNT = "chheak_narat@bkrt";
+const MERCHANT_NAME = "NARAT CHHEAK";
 
 const SupportPage = () => {
   const { lang } = useI18n();
@@ -45,11 +45,11 @@ const SupportPage = () => {
           merchant_city: "Phnom Penh",
           amount: amount || undefined,
           currency: "USD",
-          store_label: "Daratoolsupport",
-          phone_number: "855974640130",
-          bill_number: `DT${Date.now().toString().slice(-8)}`,
-          terminal_label: "DaraTool",
-          static: !amount, // static if no amount, dynamic if amount selected
+          store_label: MERCHANT_NAME,
+          phone_number: "855975867586",
+          bill_number: `TRX${Date.now().toString().slice(-8)}`,
+          terminal_label: "Cashier-01",
+          static: !amount,
         },
       });
       if (error) throw error;
@@ -62,9 +62,9 @@ const SupportPage = () => {
           body: {
             action: "generate_deeplink",
             qr_data: data.qr,
-            callback: "https://daratool.lovable.app/support",
-            app_icon_url: "https://daratool.lovable.app/favicon.ico",
-            app_name: "DaraTool",
+            callback: "https://Hinarat.lovable.app/support",
+            app_icon_url: "https://kirashopdav.lovable.app/images/logo.png",
+            app_name: "NARAT CHHEAK",
           },
         });
         if (dlData?.deeplink) setDeeplink(dlData.deeplink);
@@ -149,15 +149,15 @@ const SupportPage = () => {
               transition={{ type: "spring", bounce: 0.5 }}
               className="mx-auto w-20 h-20 rounded-full overflow-hidden ring-4 ring-primary/20"
             >
-              <img src={daraAvatar} alt="DaraTool" className="w-full h-full object-cover" />
+              <img src={naratAvatar} alt="Hinarat" className="w-full h-full object-cover" />
             </motion.div>
             <h1 className="text-2xl font-bold">
-              {lang === "km" ? "គាំទ្រ DaraTool" : "Support DaraTool"}
+              {lang === "km" ? "គាំទ្រ Hinarat" : "Support Hinarat"}
             </h1>
             <p className="text-sm text-muted-foreground">
               {lang === "km"
-                ? "សូមអរគុណដែលប្រើ DaraTool! ការគាំទ្ររបស់អ្នកជួយយើងបន្តអភិវឌ្ឍឧបករណ៍ឥតគិតថ្លៃ 🙏"
-                : "Thank you for using DaraTool! Your support helps us keep building free tools 🙏"}
+                ? "សូមអរគុណដែលប្រើ Hinarat! ការគាំទ្ររបស់អ្នកជួយយើងបន្តអភិវឌ្ឍឧបករណ៍ឥតគិតថ្លៃ 🙏"
+                : "Thank you for using Hinarat! Your support helps us keep building free tools 🙏"}
             </p>
           </div>
 
@@ -349,14 +349,19 @@ const SupportPage = () => {
             <h3 className="font-bold">{lang === "km" ? "សូមអរគុណ! 🙏" : "Thank You! 🙏"}</h3>
             <p className="text-xs text-muted-foreground">
               {lang === "km"
-                ? "រាល់ការគាំទ្រគឺជួយឱ្យ DaraTool រក្សា 100+ ឧបករណ៍ឥតគិតថ្លៃសម្រាប់មនុស្សគ្រប់គ្នា ❤️"
-                : "Every contribution helps DaraTool maintain 100+ free tools for everyone ❤️"}
+                ? "រាល់ការគាំទ្រគឺជួយឱ្យ Hinarat រក្សា 100+ ឧបករណ៍ឥតគិតថ្លៃសម្រាប់មនុស្សគ្រប់គ្នា ❤️"
+                : "Every contribution helps Hinarat maintain 100+ free tools for everyone ❤️"}
             </p>
           </motion.div>
 
+          {/* Contact Telegram */}
           <div className="text-center text-xs text-muted-foreground space-y-1">
-            <p>📞 855 97 464 0130</p>
-            <p>© 2025 DaraTool - {lang === "km" ? "ឧបករណ៍ឥតគិតថ្លៃសម្រាប់អ្នកគ្រប់គ្នា" : "Free tools for everyone"}</p>
+            <p>
+              <a href="https://t.me/Naratkh168" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
+                📱 Telegram: @Naratkh168
+              </a>
+            </p>
+            <p>© 2026 Hinarat - {lang === "km" ? "ឧបករណ៍ឥតគិតថ្លៃសម្រាប់អ្នកគ្រប់គ្នា" : "Free tools for everyone"}</p>
           </div>
         </motion.div>
       </div>

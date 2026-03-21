@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 220 30% 97%;
     --foreground: 222 47% 11%;
 
     --card: 0 0% 100%;
@@ -58,39 +58,39 @@
   }
 
   .dark {
-    --background: 20 14% 8%;
-    --foreground: 38 35% 92%;
+    --background: 222 28% 8%;
+    --foreground: 210 30% 92%;
 
-    --card: 20 12% 12%;
-    --card-foreground: 38 35% 92%;
+    --card: 222 25% 12%;
+    --card-foreground: 210 30% 92%;
 
-    --popover: 20 12% 12%;
-    --popover-foreground: 38 35% 92%;
+    --popover: 222 25% 12%;
+    --popover-foreground: 210 30% 92%;
 
-    --primary: 38 72% 56%;
-    --primary-foreground: 20 14% 8%;
+    --primary: 221.2 83.2% 58%;
+    --primary-foreground: 222 28% 8%;
 
-    --secondary: 20 10% 16%;
-    --secondary-foreground: 38 35% 92%;
+    --secondary: 222 20% 16%;
+    --secondary-foreground: 210 30% 92%;
 
-    --muted: 20 10% 16%;
-    --muted-foreground: 30 12% 55%;
+    --muted: 222 20% 16%;
+    --muted-foreground: 215 15% 52%;
 
-    --accent: 28 50% 18%;
-    --accent-foreground: 38 35% 92%;
+    --accent: 222 25% 18%;
+    --accent-foreground: 210 30% 92%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 38 35% 92%;
+    --destructive: 0 62.8% 50%;
+    --destructive-foreground: 210 30% 92%;
 
-    --border: 25 12% 18%;
-    --input: 25 12% 18%;
-    --ring: 38 72% 56%;
+    --border: 222 18% 18%;
+    --input: 222 18% 18%;
+    --ring: 221.2 83.2% 58%;
 
-    --tool-card-bg: 20 12% 12%;
-    --tool-card-hover-border: 38 72% 56%;
-    --tool-icon-bg: 25 12% 16%;
-    --tool-icon-hover-bg: 38 50% 22%;
-    --search-bg: 20 10% 14%;
+    --tool-card-bg: 222 25% 12%;
+    --tool-card-hover-border: 221.2 83.2% 58%;
+    --tool-icon-bg: 222 20% 16%;
+    --tool-icon-hover-bg: 221.2 60% 22%;
+    --search-bg: 222 20% 14%;
   }
 }
 
@@ -99,8 +99,28 @@
     @apply border-border;
   }
 
+  /* Light mode: beautiful subtle gradient background */
   body {
-    @apply bg-background text-foreground font-khmer antialiased;
+    @apply text-foreground font-khmer antialiased;
+    background-color: hsl(var(--background));
+    background-image:
+      radial-gradient(ellipse at 20% 20%, hsl(221.2 83.2% 53.3% / 0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 10%, hsl(280 70% 60% / 0.05) 0%, transparent 45%),
+      radial-gradient(ellipse at 60% 80%, hsl(190 80% 50% / 0.04) 0%, transparent 50%),
+      url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%236366f1' fill-opacity='0.025'%3E%3Ccircle cx='30' cy='30' r='1.5'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    background-attachment: fixed;
+    min-height: 100vh;
+  }
+
+  /* Dark mode: deep space gradient */
+  .dark body {
+    background-color: hsl(var(--background));
+    background-image:
+      radial-gradient(ellipse at 10% 10%, hsl(221.2 83.2% 20% / 0.35) 0%, transparent 50%),
+      radial-gradient(ellipse at 85% 5%, hsl(260 60% 18% / 0.3) 0%, transparent 45%),
+      radial-gradient(ellipse at 50% 85%, hsl(200 70% 15% / 0.25) 0%, transparent 55%),
+      url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%234f46e5' fill-opacity='0.04'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    background-attachment: fixed;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -111,5 +131,13 @@
 @layer utilities {
   .tabular-nums {
     font-variant-numeric: tabular-nums;
+  }
+
+  .font-khmer {
+    font-family: var(--font-khmer);
+  }
+
+  .font-english {
+    font-family: var(--font-english);
   }
 }
